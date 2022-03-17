@@ -3,7 +3,9 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
-from .forms import LoginForm, UserRegistrationForm
+from .forms import LoginForm, UserRegistrationForm, UserEditForm, \
+    ProfileEditForm, CompanyCardEditForm
+from .models import CompanyCard, Profile
 
 
 def user_login(request):
@@ -50,11 +52,47 @@ def register(request):
             # В зависимости от роли задаем пользователю группу
             if user_form.cleaned_data['role'] == 'W':
                 new_user.groups.add(Group.objects.get(name='Workers'))
+                Profile.objects.create(user=new_user)
             else:
                 new_user.groups.add(Group.objects.get(name='Employers'))
+                CompanyCard.objects.create(user=new_user)
             return render(request, 'portal/account/register_done.html',
                           {'new_user': new_user})
     else:
         user_form = UserRegistrationForm()
         return render(request, 'portal/account/register.html',
                       {'user_form': user_form})
+
+
+@login_required
+def edit_profile(request):
+    if request.method == 'POST':
+        user_form = UserEditForm(instance=request.user, data=request.POST)
+        profile_form = ProfileEditForm(instance=request.user.profile,
+                                       data=request.POST,
+                                       files=request.FILES)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+    else:
+        user_form = UserEditForm(instance=request.user)
+        profile_form = ProfileEditForm(instance=request.user.profile)
+    return render(request, 'portal/account/edit_profile.html',
+                  {'user_form': user_form, 'profile_form': profile_form})
+
+
+@login_required
+def edit_company_card(request):
+    if request.method == 'POST':
+        user_form = UserEditForm(instance=request.user, data=request.POST)
+        company_card_form = CompanyCardEditForm(instance=request.user.companycard,
+                                                data=request.POST,
+                                                files=request.FILES)
+        if user_form.is_valid() and company_card_form.is_valid():
+            user_form.save()
+            company_card_form.save()
+    else:
+        user_form = UserEditForm(instance=request.user)
+        company_card_form = CompanyCardEditForm(instance=request.user.companycard)
+    return render(request, 'portal/account/edit_company_card.html',
+                  {'user_form': user_form, 'company_card_form': company_card_form})

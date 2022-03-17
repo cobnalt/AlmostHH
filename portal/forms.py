@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
+from .models import CompanyCard, Vacancy, Profile
 
 
 class LoginForm(forms.Form):
@@ -22,3 +23,21 @@ class UserRegistrationForm(forms.ModelForm):
         if cd['password'] != cd['password2']:
             raise forms.ValidationError('Passwords don\'t match.')
         return cd['password2']
+
+
+class UserEditForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'email')
+
+
+class CompanyCardEditForm(forms.ModelForm):
+    class Meta:
+        model = CompanyCard
+        fields = ('title', 'description', 'logo', 'contact')
+
+
+class ProfileEditForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ('date_of_birth', 'photo', 'contact', 'living_city', 'sex')
