@@ -1,0 +1,17 @@
+{% extends "news/base.html" %}
+{% block title %} Создание аккаунта {% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <h1 class="text-center">Регистрация</h1>
+            <p class="text-center">Используйте следующую форму для регистрации:</p>
+            <form action="." method="post" class="register_form">
+                {{ user_form.as_p }}
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-primary">Создать аккаунт</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

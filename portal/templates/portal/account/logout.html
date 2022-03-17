@@ -1,0 +1,15 @@
+{% extends "news/base.html" %}
+{% block title %} Выход {% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h1 class="text-center">Выход</h1>
+            <p class="text-center">Вы совершили выход
+            Вы можете снова <a href="{% url 'portal:login' %}">войти</a>
+            </p>
+            <hr>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,71 @@
+h1 {
+    font-size: 2.0rem;
+}
+h2 {
+    font-size: 1.5rem;
+}
+main {
+    min-height: calc(100vh - 200px);
+}
+header, footer {
+    height: 100px;
+    background: #222324;
+    color: #d4d7d9;
+}
+header>.container>.row, footer>.container>.row {
+    min-height: 100px;
+}
+.enter>a {
+    height: 40px;
+    padding: 5px 12px;
+    font-size: 18px;
+    color: #fff;
+    border-radius: 20px;
+    border: 1px solid hsla(0,0%,100%,.5);
+    text-decoration: none;
+}
+.enter>a:hover {
+    border: 1px solid hsla(0,0%,100%,1);
+}
+.single_news {
+    margin-top: 20px;
+    padding: 20px;
+    border: 0;
+    border-radius: 4px;
+    box-shadow: 0 2px 12px #edeff0;
+}
+.single_news:last-child {
+    margin-bottom: 20px;
+}
+form {
+    margin: 20px 0;
+    padding: 20px;
+    border: 0;
+    border-radius: 4px;
+    box-shadow: 0 2px 12px #edeff0;
+}
+.register_form label {
+    display: block;
+}
+.register_form input, .register_form select {
+    display: block;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.register_form p {
+    margin-bottom: 0.5rem;
+}
+.register_form .helptext {
+    display: block;
+    font-size: 12px;
+    color: #777;
+}
