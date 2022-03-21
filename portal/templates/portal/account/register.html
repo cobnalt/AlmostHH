@@ -6,7 +6,7 @@
         <div class="col-4">
             <h1 class="text-center">Регистрация</h1>
             <p class="text-center">Используйте следующую форму для регистрации:</p>
-            <form action="." method="post" class="register_form">
+            <form action="." method="post" class="register_form visual_form">
                 {{ user_form.as_p }}
                 {% csrf_token %}
                 <button type="submit" class="btn btn-outline-primary">Создать аккаунт</button>

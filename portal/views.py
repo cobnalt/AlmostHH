@@ -1,8 +1,9 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import Group
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib import messages
 from .forms import LoginForm, UserRegistrationForm, UserEditForm, \
     ProfileEditForm, CompanyCardEditForm
 from .models import CompanyCard, Profile
@@ -64,6 +65,16 @@ def register(request):
                       {'user_form': user_form})
 
 
+@login_required()
+def private(request):
+    try:
+        company_card = get_object_or_404(CompanyCard, user=request.user)
+    except Exception:
+        company_card = None
+    return render(request, 'portal/account/private.html', {'section': 'private',
+                                                           'company_card': company_card})
+
+
 @login_required
 def edit_profile(request):
     if request.method == 'POST':
@@ -82,6 +93,7 @@ def edit_profile(request):
 
 
 @login_required
+@permission_required('portal.change_companycard')
 def edit_company_card(request):
     if request.method == 'POST':
         user_form = UserEditForm(instance=request.user, data=request.POST)
@@ -91,6 +103,9 @@ def edit_company_card(request):
         if user_form.is_valid() and company_card_form.is_valid():
             user_form.save()
             company_card_form.save()
+            messages.success(request, 'Карточка компании изменена успешно.')
+        else:
+            messages.error(request, 'Ошибка при изменении карточки компании.')
     else:
         user_form = UserEditForm(instance=request.user)
         company_card_form = CompanyCardEditForm(instance=request.user.companycard)

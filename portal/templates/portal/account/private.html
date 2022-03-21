@@ -1,0 +1,58 @@
+{% extends "news/base.html" %}
+{% block title %} Личный кабинет {% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h1 class="text-center mb-3">Личный кабинет</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <div class="left-menu">
+
+                    {% include 'portal/account/includes/dashboard_menu.html' %}
+
+            </div>
+        </div>
+        <div class="col-9">
+            {% if company_card %}
+            {% if perms.portal.change_companycard %}
+            <div class="user_company card">
+                <h5 class="card-title text-center mt-2 mb-2">Карточка компании
+                    <a href="{% url 'portal:edit_company_card' %}"
+                       class="badge bg-info">Редактировать</a>
+                </h5>
+                <table class="table table-striped table-hover">
+                    <tr>
+                        <td class="text-muted">Имя: </td>
+                        <td>{{ request.user.first_name }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">Фамилия: </td>
+                        <td>{{ request.user.last_name }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">Электронная почта: </td>
+                        <td>{{ request.user.email }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">Наименование компании: </td>
+                        <td>{{ company_card.title }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">Описание: </td>
+                        <td>{{ company_card.description }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">Контакты: </td>
+                        <td>{{ company_card.contact }}</td>
+                    </tr>
+                </table>
+            </div>
+            {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
