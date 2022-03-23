@@ -1,0 +1,33 @@
+{% extends "news/base.html" %}
+{% block title %} Удаление вакансии {% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col text-center">
+
+            <h1 class="mb-3">Удаление вакансии</h1>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <div class="left-menu">
+
+                    {% include 'portal/account/includes/dashboard_menu.html' %}
+
+            </div>
+        </div>
+        <div class="col-5 text-center">
+            <p class="text-center">Вы действительно хотите удалить вакансию?</p>
+            <form action="." method="post" class="del_vacancy visual_form">
+                {% csrf_token %}
+                <p>{{ del_vac.title }}</p>
+                <p>{{ del_vac.salary }}</p>
+                <p>{{ del_vac.description }}</p>
+                <p>{{ del_vac.address }}</p>
+                <button type="submit" class="btn btn-danger">Удалить</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

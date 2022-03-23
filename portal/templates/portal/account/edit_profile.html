@@ -1,0 +1,19 @@
+{% extends "news/base.html" %}
+{% block title %} Редактирование профиля {% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <p class="text-center">Используйте следующую форму для
+                редактирования профиля:
+            </p>
+            <form action="." method="post" class="edit_profile_form visual_form" enctype="multipart/form-data">
+                {{ user_form.as_p }}
+                {{ profile_form.as_p }}
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-primary">Сохранить изменения</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

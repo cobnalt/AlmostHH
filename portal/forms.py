@@ -25,6 +25,12 @@ class UserRegistrationForm(forms.ModelForm):
         return cd['password2']
 
 
+class VacancyAddForm(forms.ModelForm):
+    class Meta:
+        model = Vacancy
+        fields = ('title', 'salary', 'description', 'address')
+
+
 class UserEditForm(forms.ModelForm):
     class Meta:
         model = User
@@ -38,6 +44,8 @@ class CompanyCardEditForm(forms.ModelForm):
 
 
 class ProfileEditForm(forms.ModelForm):
+    date_of_birth = forms.DateField(widget=forms.SelectDateWidget(years=range(1950, 2020)))
+
     class Meta:
         model = Profile
         fields = ('date_of_birth', 'photo', 'contact', 'living_city', 'sex')

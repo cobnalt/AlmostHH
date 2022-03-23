@@ -1,0 +1,56 @@
+{% extends "news/base.html" %}
+{% block title %} Мои вакансии {% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col text-center">
+
+            <h1 class="mb-3">Мои вакансии </h1>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <div class="left-menu">
+
+                    {% include 'portal/account/includes/dashboard_menu.html' %}
+
+            </div>
+        </div>
+        <div class="col-9">
+            <h4 class=" text-center"><a href="{% url 'portal:add_vacancy' %}"
+                       class="badge bg-info">Добавить вакансию</a></h4>
+            <div class="my-vacancies">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Наименование</th>
+                            <th>Зарплата</th>
+                            <th>Город вакансии</th>
+                            <th>Статус</th>
+                            <th>Ред</th>
+                            <th>Удал</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for vac in vacs %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ vac.title }}</td>
+                            <td>{{ vac.salary }}</td>
+                            <td>{{ vac.address }}</td>
+                            <td>{{ vac.get_status_display }}</td>
+                            <td><a href="{% url 'portal:edit_vacancy' vac.id %}"><i class="bi bi-pen-fill"></i></a></td>
+                            <td><a href="{% url 'portal:delete_vacancy' vac.id %}"><i class="bi bi-x-circle-fill"></i></a></td>
+                        </tr>
+                        {% empty %}
+                        <h5>Пока еще не добавлено ни одной вакансии</h5>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

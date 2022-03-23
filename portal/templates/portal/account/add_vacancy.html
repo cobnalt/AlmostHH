@@ -1,0 +1,30 @@
+{% extends "news/base.html" %}
+{% block title %} Добавление вакансии {% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col text-center">
+
+            <h1 class="mb-3">Добавление вакансии</h1>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <div class="left-menu">
+
+                    {% include 'portal/account/includes/dashboard_menu.html' %}
+
+            </div>
+        </div>
+        <div class="col-5 text-center">
+            <p class="text-center">Используйте следующую форму для добавления вакансии:</p>
+            <form action="." method="post" class="add_vacancy visual_form">
+                {{ vacancy_form.as_p }}
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-primary">Сохранить</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,12 +1,13 @@
 from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
+from django.utils.text import slugify
 from .forms import LoginForm, UserRegistrationForm, UserEditForm, \
-    ProfileEditForm, CompanyCardEditForm
-from .models import CompanyCard, Profile
+    ProfileEditForm, CompanyCardEditForm, VacancyAddForm
+from .models import CompanyCard, Profile, Vacancy
 
 
 def user_login(request):
@@ -71,11 +72,17 @@ def private(request):
         company_card = get_object_or_404(CompanyCard, user=request.user)
     except Exception:
         company_card = None
+    try:
+        profile = get_object_or_404(Profile, user=request.user)
+    except Exception:
+        profile = None
     return render(request, 'portal/account/private.html', {'section': 'private',
-                                                           'company_card': company_card})
+                                                           'company_card': company_card,
+                                                           'profile': profile})
 
 
 @login_required
+@permission_required('portal.change_profile')
 def edit_profile(request):
     if request.method == 'POST':
         user_form = UserEditForm(instance=request.user, data=request.POST)
@@ -85,6 +92,9 @@ def edit_profile(request):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
+            messages.success(request, 'Профиль изменен успешно.')
+        else:
+            messages.error(request, 'Ошибка при изменении профиля.')
     else:
         user_form = UserEditForm(instance=request.user)
         profile_form = ProfileEditForm(instance=request.user.profile)
@@ -111,3 +121,67 @@ def edit_company_card(request):
         company_card_form = CompanyCardEditForm(instance=request.user.companycard)
     return render(request, 'portal/account/edit_company_card.html',
                   {'user_form': user_form, 'company_card_form': company_card_form})
+
+
+@login_required
+@permission_required('portal.add_vacancy')
+def my_vacancies(request):
+    vacs = Vacancy.objects.filter(company=request.user.companycard)
+    return render(request, 'portal/account/my_vacancies.html', {'vacs': vacs})
+
+
+@login_required
+@permission_required('portal.add_vacancy')
+def add_vacancy(request):
+    if request.method == 'POST':
+        vacancy_form = VacancyAddForm(request.POST)
+        if vacancy_form.is_valid():
+            new_vacancy = vacancy_form.save(commit=False)
+            new_vacancy.company = request.user.companycard
+            new_vacancy.slug = slugify(new_vacancy.title)
+            new_vacancy.save()
+            messages.success(request, 'Вакансия создана успешно.')
+            return redirect('portal:my_vacancies')
+        else:
+            messages.error(request, 'Ошибка при создании вакансии.')
+    else:
+        if request.user.companycard.title == "":
+            messages.warning(request, 'Сначала заполните карточку компании.')
+            return redirect('portal:edit_company_card')
+        vacancy_form = VacancyAddForm()
+    return render(request, 'portal/account/add_vacancy.html',
+                  {'vacancy_form': vacancy_form})
+
+
+@login_required
+@permission_required('portal.change_vacancy')
+def edit_vacancy(request, vacancy_id):
+    edit_vac = get_object_or_404(Vacancy, pk=vacancy_id)
+    if request.method == 'POST':
+        vacancy_form = VacancyAddForm(instance=edit_vac, data=request.POST)
+        if vacancy_form.is_valid():
+            new_vacancy = vacancy_form.save(commit=False)
+            new_vacancy.company = request.user.companycard
+            new_vacancy.slug = slugify(new_vacancy.title)
+            new_vacancy.save()
+            messages.success(request, 'Вакансия изменена успешно.')
+            return redirect('portal:my_vacancies')
+        else:
+            messages.error(request, 'Ошибка при создании вакансии.')
+    else:
+        vacancy_form = VacancyAddForm(instance=edit_vac)
+    return render(request, 'portal/account/edit_vacancy.html',
+                  {'vacancy_form': vacancy_form})
+
+
+@login_required
+@permission_required('portal.delete_vacancy')
+def delete_vacancy(request, vacancy_id):
+    del_vac = get_object_or_404(Vacancy, pk=vacancy_id)
+    if request.method == 'POST':
+        del_vac.delete()
+        messages.success(request, 'Вакансия удалена успешно.')
+        return redirect('portal:my_vacancies')
+    else:
+        context = {'del_vac': del_vac}
+    return render(request, 'portal/account/delete_vacancy.html', context)

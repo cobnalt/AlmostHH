@@ -52,6 +52,46 @@
             </div>
             {% endif %}
             {% endif %}
+            {% if profile %}
+            {% if perms.portal.change_profile %}
+            <div class="profile card">
+                <h5 class="card-title text-center mt-2 mb-2">Профиль
+                    <a href="{% url 'portal:edit_profile' %}"
+                       class="badge bg-info">Редактировать</a>
+                </h5>
+                <table class="table table-striped table-hover">
+                    <tr>
+                        <td class="text-muted">Имя: </td>
+                        <td>{{ request.user.first_name }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">Фамилия: </td>
+                        <td>{{ request.user.last_name }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">Электронная почта: </td>
+                        <td>{{ request.user.email }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">Дата рождения: </td>
+                        <td>{{ profile.date_of_birth }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">Город проживания: </td>
+                        <td>{{ profile.living_city }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">Контакты: </td>
+                        <td>{{ profile.contact }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">Пол: </td>
+                        <td>{{ profile.get_sex_display }}</td>
+                    </tr>
+                </table>
+            </div>
+            {% endif %}
+            {% endif %}
         </div>
     </div>
 </div>
