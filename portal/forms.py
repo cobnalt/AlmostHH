@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import CompanyCard, Vacancy, Profile
+from .models import CompanyCard, Vacancy, Profile, Resume, Experience
+from datetime import datetime
 
 
 class LoginForm(forms.Form):
@@ -49,3 +50,22 @@ class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ('date_of_birth', 'photo', 'contact', 'living_city', 'sex')
+
+
+class ResumeAddForm(forms.ModelForm):
+    class Meta:
+        model = Resume
+        fields = ('title', 'salary', 'employment', 'schedule', 'about_me',
+                  'education', 'language', 'citizenship')
+
+
+class ExperienceAddForm(forms.ModelForm):
+    start = forms.DateField(
+        widget=forms.SelectDateWidget(years=range(1970, datetime.now().year+1)))
+    finish = forms.DateField(
+        widget=forms.SelectDateWidget(years=range(1970, datetime.now().year+1)))
+
+    class Meta:
+        model = Experience
+        fields = ('until_now', 'finish', 'start', 'organisation_name',
+                  'position', 'function')

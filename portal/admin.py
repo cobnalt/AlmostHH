@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CompanyCard, Vacancy, Profile
+from .models import CompanyCard, Vacancy, Profile, Resume, Experience
 
 
 @admin.register(CompanyCard)
@@ -28,3 +28,21 @@ class ProfileAdmin(admin.ModelAdmin):
     list_filter = ('user', 'living_city')
     search_fields = ('user', 'living_city')
     ordering = ('living_city',)
+
+
+@admin.register(Resume)
+class ResumeAdmin(admin.ModelAdmin):
+    list_display = ('title', 'slug', 'salary', 'user', 'publish', 'status')
+    list_filter = ('status', 'created', 'publish', 'user')
+    search_fields = ('title',)
+    prepopulated_fields = {'slug': ('title',)}
+    date_hierarchy = 'publish'
+    ordering = ('status', 'publish')
+
+
+@admin.register(Experience)
+class ExperienceAdmin(admin.ModelAdmin):
+    list_display = ('start', 'finish', 'until_now', 'organisation_name', 'user')
+    list_filter = ('organisation_name', 'user')
+    search_fields = ('organisation_name', 'user')
+    ordering = ('organisation_name',)

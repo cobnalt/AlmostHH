@@ -1,0 +1,49 @@
+{% extends "news/base.html" %}
+{% block title %} Добавление резюме {% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col text-center">
+
+            <h1 class="mb-3">Добавление резюме</h1>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <div class="left-menu">
+
+                    {% include 'portal/account/includes/dashboard_menu.html' %}
+
+            </div>
+        </div>
+        <div class="col-9 text-center">
+            <p class="text-center">Используйте следующую форму для добавления опыта работы:</p>
+            <form action="." method="post" class="add_resume visual_form">
+                {% csrf_token %}
+                {{ resume_form.as_p }}
+                <div class="work_exp">
+                    <h4>Опыт работы</h4>
+                    <a href="{% url 'portal:add_experience' %}" class="btn btn-primary">Добавить опыт</a>
+                    {% if experiences %}
+                    {% for exp in experiences %}
+                    <div class="work_exp__item">
+                        <div class="work_exp__date">
+                            {{ exp.finish }} - {{ exp.start }}
+                        </div>
+                        <div class="work_exp__descr">
+                            <p class="mb-3"><strong>{{ exp.organisation_name }}</strong></p>
+                            <p><strong>{{ exp.position }}</strong></p>
+                            <p>{{ exp.function }}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+                <button type="submit" class="btn btn-outline-primary mt-3">Сохранить</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

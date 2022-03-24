@@ -6,8 +6,9 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
 from django.utils.text import slugify
 from .forms import LoginForm, UserRegistrationForm, UserEditForm, \
-    ProfileEditForm, CompanyCardEditForm, VacancyAddForm
-from .models import CompanyCard, Profile, Vacancy
+    ProfileEditForm, CompanyCardEditForm, VacancyAddForm, ResumeAddForm,\
+    ExperienceAddForm
+from .models import CompanyCard, Profile, Vacancy, Resume, Experience
 
 
 def user_login(request):
@@ -138,7 +139,7 @@ def add_vacancy(request):
         if vacancy_form.is_valid():
             new_vacancy = vacancy_form.save(commit=False)
             new_vacancy.company = request.user.companycard
-            new_vacancy.slug = slugify(new_vacancy.title)
+            new_vacancy.slug = slugify(new_vacancy.title, )
             new_vacancy.save()
             messages.success(request, 'Вакансия создана успешно.')
             return redirect('portal:my_vacancies')
@@ -185,3 +186,85 @@ def delete_vacancy(request, vacancy_id):
     else:
         context = {'del_vac': del_vac}
     return render(request, 'portal/account/delete_vacancy.html', context)
+
+
+@login_required
+@permission_required('portal.add_resume')
+def my_resumes(request):
+    resumes = Resume.objects.filter(user=request.user)
+    return render(request, 'portal/account/my_resumes.html', {'resumes': resumes})
+
+
+@login_required
+@permission_required('portal.add_resume')
+def add_resume(request):
+    try:
+        exps = request.user.experiences.all()
+    except Exception:
+        exps = None
+    if request.method == 'POST':
+        resume_form = ResumeAddForm(request.POST)
+        if resume_form.is_valid():
+            new_resume = resume_form.save(commit=False)
+            new_resume.slug = slugify(new_resume.title)
+            new_resume.user = request.user
+            new_resume.save()
+            messages.success(request, 'Новое резюме добавлено успешно')
+            return redirect('portal:my_resumes')
+        else:
+            messages.error(request, 'Ошибка при добавлении резюме')
+    else:
+        resume_form = ResumeAddForm()
+    return render(request, 'portal/account/add_resume.html',
+                  {'resume_form': resume_form,
+                   'experiences': exps})
+
+
+@login_required
+@permission_required('portal.change_resume')
+def edit_resume(request, resume_id):
+    pass
+
+
+@login_required
+@permission_required('portal.delete_resume')
+def delete_resume(request, resume_id):
+    del_resume = get_object_or_404(Resume, pk=resume_id)
+    if request.method == 'POST':
+        del_resume.delete()
+        messages.success(request, 'Резюме удалено успешно.')
+        return redirect('portal:my_resumes')
+    else:
+        context = {'del_resume': del_resume}
+    return render(request, 'portal/account/delete_resume.html', context)
+
+
+@login_required
+@permission_required('portal.add_resume')
+def add_experience(request):
+    if request.method == 'POST':
+        exp_form = ExperienceAddForm(request.POST)
+        if exp_form.is_valid():
+            new_exp = exp_form.save(commit=False)
+            new_exp.user = request.user
+            new_exp.save()
+            messages.success(request, 'Новый опыт работы добавлен успешно')
+            return redirect('portal:add_resume')
+        else:
+            messages.error(request, 'Ошибка при добавлении опыта работы')
+    else:
+        exp_form = ExperienceAddForm()
+    return render(request, 'portal/account/add_experience.html',
+                  {'exp_form': exp_form})
+
+
+@login_required
+@permission_required('portal.change_resume')
+def edit_experience(request, experience_id):
+    pass
+
+
+@login_required
+@permission_required('portal.delete_resume')
+def delete_experience(request, experience_id):
+    pass

@@ -2,7 +2,7 @@
 <div class="list-group">
     <a href="#" class="list-group-item list-group-item-action">Отклики и приглашения</a>
     {% if perms.portal.change_profile %}
-    <a href="#" class="list-group-item list-group-item-action">Мои резюме</a>
+    <a href="{% url 'portal:my_resumes' %}" class="list-group-item list-group-item-action">Мои резюме</a>
     <a href="#" class="list-group-item list-group-item-action">Избранные вакансии</a>
     {% else %}
     <a href="{% url 'portal:my_vacancies' %}" class="list-group-item list-group-item-action">Мои вакансии</a>

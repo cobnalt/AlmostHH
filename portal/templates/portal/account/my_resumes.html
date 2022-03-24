@@ -1,0 +1,54 @@
+{% extends "news/base.html" %}
+{% block title %} Мои резюме {% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col text-center">
+
+            <h1 class="mb-3">Мои резюме </h1>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <div class="left-menu">
+
+                    {% include 'portal/account/includes/dashboard_menu.html' %}
+
+            </div>
+        </div>
+        <div class="col-9">
+            <h4 class=" text-center"><a href="{% url 'portal:add_resume' %}"
+                       class="badge bg-info">Добавить резюме</a></h4>
+            <div class="my-resumes">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Наименование</th>
+                            <th>Зарплата</th>
+                            <th>Статус</th>
+                            <th>Ред</th>
+                            <th>Удал</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for resume in resumes %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ resume.title }}</td>
+                            <td>{{ resume.salary }}</td>
+                            <td>{{ resume.get_status_display }}</td>
+                            <td><a href=""><i class="bi bi-pen-fill"></i></a></td>
+                            <td><a href="{% url 'portal:delete_resume' resume.id %}"><i class="bi bi-x-circle-fill"></i></a></td>
+                        </tr>
+                        {% empty %}
+                        <h5 class="text-center">Пока еще не добавлено ни одного резюме</h5>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
