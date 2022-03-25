@@ -132,6 +132,13 @@ def my_vacancies(request):
 
 
 @login_required
+def vacancy_detail(request, vacancy_id):
+    vacancy = get_object_or_404(Vacancy, pk=vacancy_id)
+    return render(request, 'portal/account/vacancy_detail.html',
+                  {'vacancy': vacancy})
+
+
+@login_required
 @permission_required('portal.add_vacancy')
 def add_vacancy(request):
     if request.method == 'POST':
@@ -196,6 +203,13 @@ def my_resumes(request):
 
 
 @login_required
+def resume_detail(request, resume_id):
+    resume = get_object_or_404(Resume, pk=resume_id)
+    return render(request, 'portal/account/resume_detail.html',
+                  {'resume': resume})
+
+
+@login_required
 @permission_required('portal.add_resume')
 def add_resume(request):
     try:
@@ -223,7 +237,26 @@ def add_resume(request):
 @login_required
 @permission_required('portal.change_resume')
 def edit_resume(request, resume_id):
-    pass
+    edit_res = get_object_or_404(Resume, pk=resume_id)
+    try:
+        exps = request.user.experiences.all()
+    except Exception:
+        exps = None
+    if request.method == 'POST':
+        resume_form = ResumeAddForm(instance=edit_res, data=request.POST)
+        if resume_form.is_valid():
+            new_resume = resume_form.save(commit=False)
+            new_resume.slug = slugify(new_resume.title)
+            new_resume.user = request.user
+            new_resume.save()
+            messages.success(request, 'Резюме отредактировано успешно')
+            return redirect('portal:my_resumes')
+        else:
+            messages.error(request, 'Ошибка при редактировании резюме')
+    else:
+        resume_form = ResumeAddForm(instance=edit_res)
+    return render(request, 'portal/account/edit_resume.html',
+                  {'resume_form': resume_form, 'exps': exps})
 
 
 @login_required

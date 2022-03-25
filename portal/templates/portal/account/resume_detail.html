@@ -1,0 +1,63 @@
+{% extends "news/base.html" %}
+{% block title %} {{ resume.title }} {% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-3">
+            <div class="left-menu">
+
+                    {% include 'portal/account/includes/dashboard_menu.html' %}
+
+            </div>
+        </div>
+        <div class="col-9">
+            <div class="resume_card mt-5 mb-5">
+                <div class="resume_card__data">
+                    <h1>{{ resume.user.last_name }} {{ resume.user.first_name }}</h1>
+                    <p>{{ resume.user.profile.get_sex_display }}, {{ resume.user.profile.date_of_birth }} года рождения</p>
+                    <p class="h5 text-muted">Контакты</p>
+                    <p>{{ resume.user.profile.contact }}</p>
+                    <p>{{ resume.user.profile.living_city }}</p>
+                </div>
+                <div class="resume_card__photo">
+                    <p>{{ resume.user.profile.photo }}</p>
+                </div>
+            </div>
+            <h2>{{ resume.title }}
+<!--                {% if perms.portal.change_vacancy %}-->
+<!--                <span class="h6"><a href="{% url 'portal:edit_vacancy' vacancy.id %}">редактировать</a></span>-->
+<!--                {% endif %}-->
+            </h2>
+            <p class="h4 text-muted">{{ resume.salary }}</p>
+            <p>Занятость: {{ resume.employment }}</p>
+            <p>График работы: {{ resume.schedule }}</p>
+            <h2 class="text-muted">Опыт работы</h2>
+            <div class="experience">
+                {% if resume.user.experiences %}
+                {% for exp in resume.user.experiences.all %}
+                <div class="work_exp__item">
+                    <div class="work_exp__date">
+                        {{ exp.finish }} - {{ exp.start }}
+                    </div>
+                    <div class="work_exp__descr">
+                        <p class="mb-3"><strong>{{ exp.organisation_name }}</strong></p>
+                        <p><strong>{{ exp.position }}</strong></p>
+                        <p>{{ exp.function }}</p>
+                    </div>
+                </div>
+                <hr>
+                {% endfor %}
+                {% endif %}
+            </div>
+            <h2 class="text-muted">Обо мне</h2>
+            <p>{{ resume.about_me | linebreaks }}</p>
+            <h2 class="text-muted">Высшее образование</h2>
+            <p>{{ resume.education }}</p>
+            <h2 class="text-muted">Знание языков</h2>
+            <p>{{ resume.language }}</p>
+            <h2 class="text-muted">Гражданство</h2>
+            <p>{{ resume.citizenship }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

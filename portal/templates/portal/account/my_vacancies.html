@@ -37,7 +37,7 @@
                         {% for vac in vacs %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
-                            <td>{{ vac.title }}</td>
+                            <td><a href="{% url 'portal:vacancy_detail' vac.id %}">{{ vac.title }}</a></td>
                             <td>{{ vac.salary }}</td>
                             <td>{{ vac.address }}</td>
                             <td>{{ vac.get_status_display }}</td>

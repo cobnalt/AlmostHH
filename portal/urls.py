@@ -15,11 +15,13 @@ urlpatterns = [
     path('edit_profile/', views.edit_profile, name='edit_profile'),
 
     path('my_vacancies/', views.my_vacancies, name='my_vacancies'),
+    path('vacancy/<int:vacancy_id>/', views.vacancy_detail, name='vacancy_detail'),
     path('add_vacancy/', views.add_vacancy, name='add_vacancy'),
     path('edit_vacancy/<int:vacancy_id>/', views.edit_vacancy, name='edit_vacancy'),
     path('delete_vacancy/<int:vacancy_id>/', views.delete_vacancy, name='delete_vacancy'),
 
     path('my_resumes/', views.my_resumes, name='my_resumes'),
+    path('resume/<int:resume_id>/', views.resume_detail, name='resume_detail'),
     path('add_resume/', views.add_resume, name='add_resume'),
     path('edit_resume/<int:resume_id>/', views.edit_resume, name='edit_resume'),
     path('delete_resume/<int:resume_id>/', views.delete_resume, name='delete_resume'),

@@ -1,0 +1,33 @@
+{% extends "news/base.html" %}
+{% block title %} {{ vacancy.title }} {% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-3">
+            <div class="left-menu">
+
+                    {% include 'portal/account/includes/dashboard_menu.html' %}
+
+            </div>
+        </div>
+        <div class="col-9">
+            <h1>{{ vacancy.title }}
+                {% if perms.portal.change_vacancy %}
+                <span class="h6"><a href="{% url 'portal:edit_vacancy' vacancy.id %}">редактировать</a></span>
+                {% endif %}
+            </h1>
+            <p class="h3 text-muted">{{ vacancy.salary }}</p>
+            <div class="company_card mt-5 mb-5">
+                <p class="h3">{{ vacancy.company.title }}</p>
+                <p>{{ vacancy.company.logo }}</p>
+            </div>
+            <p>{{ vacancy.description | linebreaks }}</p>
+            <h2>Адрес</h2>
+            <p>{{ vacancy.address }}</p>
+            <h2>Контактная информация</h2>
+            <p>{{ vacancy.company.contact }}</p>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

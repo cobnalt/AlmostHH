@@ -36,10 +36,10 @@
                         {% for resume in resumes %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
-                            <td>{{ resume.title }}</td>
+                            <td><a href="{% url 'portal:resume_detail' resume.id %}">{{ resume.title }}</a></td>
                             <td>{{ resume.salary }}</td>
                             <td>{{ resume.get_status_display }}</td>
-                            <td><a href=""><i class="bi bi-pen-fill"></i></a></td>
+                            <td><a href="{% url 'portal:edit_resume' resume.id %}"><i class="bi bi-pen-fill"></i></a></td>
                             <td><a href="{% url 'portal:delete_resume' resume.id %}"><i class="bi bi-x-circle-fill"></i></a></td>
                         </tr>
                         {% empty %}
