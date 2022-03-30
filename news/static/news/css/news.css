@@ -32,7 +32,7 @@ header>.container>.row, footer>.container>.row {
     color: #a3daa5;
     border: 1px solid rgba(163,218,165,.5);
 }
-.single_news {
+.single_news, .partner_card {
     margin-top: 20px;
     padding: 20px;
     border: 0;

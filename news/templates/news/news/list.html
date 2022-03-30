@@ -44,6 +44,40 @@
             </div>
         </div>
     </div>
-     {% endfor %}
+    {% endfor %}
+    {% include "news/pagination.html" with page=news %}
+    <h1 class="text-center">Компании - партнеры</h1>
+    <div class="row mb-4">
+        <div class="col-4">
+            <div class="partner_card">
+                Albatross Internet Group
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="partner_card">
+                ALFA system
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="partner_card">
+                1C:Франчайзи Инжиниринг
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="partner_card">
+                Cetera
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="partner_card">
+                EYECONWEB
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="partner_card">
+                Medesk
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

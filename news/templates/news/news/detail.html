@@ -7,7 +7,7 @@
             <h1>{{ news.title }}</h1>
             <p class="date"><small class="text-muted">{{ news.publish }}</small></p>
             <hr>
-            <p class="content">{{ news.body }}</p>
+            <p class="content">{{ news.body | linebreaks }}</p>
         </div>
     </div>
 </div>
