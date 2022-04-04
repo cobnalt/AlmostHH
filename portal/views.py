@@ -146,7 +146,8 @@ def add_vacancy(request):
         if vacancy_form.is_valid():
             new_vacancy = vacancy_form.save(commit=False)
             new_vacancy.company = request.user.companycard
-            new_vacancy.slug = slugify(new_vacancy.title, )
+            new_vacancy.slug = slugify(new_vacancy.title)
+            new_vacancy.status = 'send' if 'moderate' in request.POST else 'draft'
             new_vacancy.save()
             messages.success(request, 'Вакансия создана успешно.')
             return redirect('portal:my_vacancies')
@@ -171,6 +172,7 @@ def edit_vacancy(request, vacancy_id):
             new_vacancy = vacancy_form.save(commit=False)
             new_vacancy.company = request.user.companycard
             new_vacancy.slug = slugify(new_vacancy.title)
+            new_vacancy.status = 'send' if 'moderate' in request.POST else 'draft'
             new_vacancy.save()
             messages.success(request, 'Вакансия изменена успешно.')
             return redirect('portal:my_vacancies')
@@ -222,6 +224,7 @@ def add_resume(request):
             new_resume = resume_form.save(commit=False)
             new_resume.slug = slugify(new_resume.title)
             new_resume.user = request.user
+            new_resume.status = 'send' if 'moderate' in request.POST else 'draft'
             new_resume.save()
             messages.success(request, 'Новое резюме добавлено успешно')
             return redirect('portal:my_resumes')
@@ -248,6 +251,7 @@ def edit_resume(request, resume_id):
             new_resume = resume_form.save(commit=False)
             new_resume.slug = slugify(new_resume.title)
             new_resume.user = request.user
+            new_resume.status = 'send' if 'moderate' in request.POST else 'draft'
             new_resume.save()
             messages.success(request, 'Резюме отредактировано успешно')
             return redirect('portal:my_resumes')

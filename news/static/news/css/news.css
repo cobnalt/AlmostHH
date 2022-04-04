@@ -80,3 +80,7 @@ form {
 .work_exp__descr {
     margin-left: 40px;
 }
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+}
