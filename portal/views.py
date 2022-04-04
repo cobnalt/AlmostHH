@@ -22,7 +22,11 @@ def user_login(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return render(request, 'portal/account/dashboard.html', {'section': 'dashboard'})
+                vacancies = Vacancy.objects.all().filter(status='published')
+                resumes = Resume.objects.all().filter(status='published')
+                return render(request, 'portal/account/dashboard.html',
+                              {'section': 'dashboard', 'vacancies': vacancies,
+                               'resumes': resumes})
             else:
                 return HttpResponse("Disable Acc")
         else:
@@ -39,7 +43,11 @@ def user_logout(request):
 
 @login_required()
 def dashboard(request):
-    return render(request, 'portal/account/dashboard.html', {'section': 'dashboard'})
+    vacancies = Vacancy.objects.all().filter(status='published')
+    resumes = Resume.objects.all().filter(status='published')
+    return render(request, 'portal/account/dashboard.html',
+                  {'section': 'dashboard', 'vacancies': vacancies,
+                   'resumes': resumes})
 
 
 def register(request):

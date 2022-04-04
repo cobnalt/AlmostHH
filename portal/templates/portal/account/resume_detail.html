@@ -24,9 +24,9 @@
                 </div>
             </div>
             <h2>{{ resume.title }}
-<!--                {% if perms.portal.change_vacancy %}-->
-<!--                <span class="h6"><a href="{% url 'portal:edit_vacancy' vacancy.id %}">редактировать</a></span>-->
-<!--                {% endif %}-->
+                {% if perms.portal.change_resume %}
+                <span class="h6"><a href="{% url 'portal:edit_resume' resume.id %}">редактировать</a></span>
+                {% endif %}
             </h2>
             <p class="h4 text-muted">{{ resume.salary }}</p>
             <p>Занятость: {{ resume.employment }}</p>

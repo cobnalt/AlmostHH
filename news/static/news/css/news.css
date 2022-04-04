@@ -84,3 +84,20 @@ form {
     display: flex;
     justify-content: space-between;
 }
+.vac-item, .res-item {
+    margin: 10px 5px;
+    padding: 20px;
+    border: 0;
+    border-radius: 4px;
+    box-shadow: 0 2px 12px #edeff0;
+}
+.vac-item > p {
+    margin-bottom: 0;
+}
+.item_salary, .item_title > a {
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+.item_title > a {
+    text-decoration: none;
+}
