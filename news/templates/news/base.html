@@ -11,19 +11,29 @@
         <header>
             <div class="container">
                 <div class="row align-items-center justify-content-between">
-                    <div class="col-4">
+                    <div class="col-2">
                         <div class="logo">
                             <a href="/"><img src="{% static 'news/img/logo.png' %}" alt=""></a>
                         </div>
                     </div>
+                    <div class="col-4">
+                        {% if request.user.is_authenticated %}
+                        {% if perms.portal.change_profile %}
+                            <form method="get" class="search_block" action="{% url 'portal:find_job' %}">
+                              <input name="q" class="form-control" type="text" placeholder="Поиск по вакансиям...">
+                              <button type="submit" class="btn btn-success">Найти</button>
+                            </form>
+                        {% else %}
+                            <form method="get" class="search_block" action="{% url 'portal:find_resume' %}">
+                              <input name="q" class="form-control"  type="text" placeholder="Поиск по резюме...">
+                              <button type="submit" class="btn btn-success">Найти</button>
+                            </form>
+                        {% endif %}
+                        {% endif %}
+                    </div>
                     <div class="col-6">
                         <div class="enter text-end">
                             {% if request.user.is_authenticated %}
-                                {% if perms.portal.change_profile %}
-                                <a href="{% url 'portal:find_job' %}" {% if section == "find_job" %} class="selected"{% endif %}>Поиск вакансий</a>
-                                {% else %}
-                                <a href="{% url 'portal:find_resume' %}" {% if section == "find_resume" %} class="selected"{% endif %}>Поиск резюме</a>
-                                {% endif %}
                             <a href="{% url 'portal:dashboard' %}" {% if section == "dashboard" %} class="selected"{% endif %}>Рабочий стол</a>
                             <a href="{% url 'portal:private' %}" {% if section == "private" %} class="selected"{% endif %}>Личный кабинет</a>
                             <a href="{% url 'portal:logout' %}">Выйти</a>
@@ -39,7 +49,7 @@
             {% include 'portal/account/includes/messages.html' %}
             {% block content %} {% endblock %}
         </main>
-        <footer>
+        <footer class="mt-5">
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col">

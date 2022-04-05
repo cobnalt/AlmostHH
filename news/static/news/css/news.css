@@ -102,7 +102,7 @@ form {
     text-decoration: none;
 }
 
-.find_resume {
+.find_resume, .find_job {
     margin-top: 20px;
     padding: 20px;
     border: 0;
@@ -110,10 +110,12 @@ form {
     box-shadow: 0 2px 12px #edeff0;
 }
 
-.find_job {
-    margin-top: 20px;
-    padding: 20px;
-    border: 0;
-    border-radius: 4px;
-    box-shadow: 0 2px 12px #edeff0;
+.search_block {
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+}
+.search_block .form-control {
+    width: 77%;
+    display: inline-block;
 }

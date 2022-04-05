@@ -321,22 +321,18 @@ def delete_experience(request, experience_id):
 @login_required()
 def find_resume(request):
     query = request.GET.get('q')
+    resume = Resume.objects.all().filter(status='published')
     if not query:
-        resume = Resume.objects.all()
-        return render(request, 'portal/account/find_resume.html', {'section': 'find_resume', 'resume': resume})
-    resume = Resume.objects.filter(
-        Q(title__icontains=query)
-    )
-    return render(request, 'portal/account/find_resume.html', {'section': 'find_resume', 'resume': resume})
+        return render(request, 'portal/account/find_resume.html', {'resume': resume})
+    resume = resume.filter(title__icontains=query)
+    return render(request, 'portal/account/find_resume.html', {'resume': resume})
 
 
 @login_required()
 def find_job(request):
     query = request.GET.get('q')
+    job = Vacancy.objects.all().filter(status='published')
     if not query:
-        job = Vacancy.objects.all()
-        return render(request, 'portal/account/find_job.html', {'section': 'find_job', 'job': job})
-    job = Vacancy.objects.filter(
-        Q(title__icontains=query)
-    )
-    return render(request, 'portal/account/find_job.html', {'section': 'find_job', 'job': job})
+        return render(request, 'portal/account/find_job.html', {'job': job})
+    job = job.filter(title__icontains=query)
+    return render(request, 'portal/account/find_job.html', {'job': job})

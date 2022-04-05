@@ -3,31 +3,20 @@
 {% block content %}
 <div class="container">
     <div class="row">
-        <div class="col">
-            <h1 class="text-center mb-3">Поиск вакансий</h1>
-            <form method="get">
-              <input name="q" type="text" placeholder="Поиск...">
-              <button type="submit">Найти</button>
-            </form>
-        </div>
-    </div>
-</div>
-{% for s_job in job %}
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <div class="find_job">
-                    <h2>
-                        <a href="#">{{ s_job.title }}</a>
-                    </h2>
-                    <p class="content">{{ s_resume.company}}</p>
-                    <p class="content">{{ s_resume.address}}</p>
-                    <p class="content"><small class="text-muted">{{ s_job.salary }}</small></p>
-                    <p class="content">{{ s_job.description |truncatewords:30|linebreaks }}</p>
-                    <p class="content"><small class="text-muted">{{ s_job.publish }}</small></p>
-                </div>
+        {% for s_job in job %}
+        <div class="col-12">
+            <div class="find_job">
+                <h2>
+                    <a href="{% url 'portal:vacancy_detail' s_job.id %}">{{ s_job.title }}</a>
+                </h2>
+                <p class="content">{{ s_job.company}}</p>
+                <p class="content">{{ s_job.address}}</p>
+                <p class="content"><small class="text-muted">{{ s_job.salary}}</small></p>
+                <p class="content">{{ s_job.description|truncatewords:30|linebreaks }}</p>
+                <p class="content"><small class="text-muted">{{ s_job.publish}}</small></p>
             </div>
         </div>
+        {% endfor %}
     </div>
-{% endfor %}
+</div>
 {% endblock %}
