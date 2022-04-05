@@ -50,6 +50,7 @@ class Vacancy(models.Model):
     publish = models.DateTimeField(default=timezone.now)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    comment = models.TextField(verbose_name='Комментарий', blank=True)
     status = models.CharField(max_length=15, choices=STATUS_CHOICES,
                               default='draft',
                               verbose_name='Статус')
@@ -81,6 +82,7 @@ class Resume(models.Model):
     publish = models.DateTimeField(default=timezone.now)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    comment = models.TextField(verbose_name='Комментарий', blank=True)
     status = models.CharField(max_length=15, choices=STATUS_CHOICES,
                               default='draft',
                               verbose_name='Статус')

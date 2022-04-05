@@ -11,6 +11,11 @@
             </div>
         </div>
         <div class="col-9">
+            {% if perms.portal.change_resume and resume.user == request.user %}
+            {% if resume.comment %}
+            <p class="alert alert-danger">{{ resume.comment }}</p>
+            {% endif %}
+            {% endif %}
             <div class="resume_card mt-5 mb-5">
                 <div class="resume_card__data">
                     <h1>{{ resume.user.last_name }} {{ resume.user.first_name }}</h1>
@@ -24,7 +29,7 @@
                 </div>
             </div>
             <h2>{{ resume.title }}
-                {% if perms.portal.change_resume %}
+                {% if perms.portal.change_resume and resume.user == request.user %}
                 <span class="h6"><a href="{% url 'portal:edit_resume' resume.id %}">редактировать</a></span>
                 {% endif %}
             </h2>

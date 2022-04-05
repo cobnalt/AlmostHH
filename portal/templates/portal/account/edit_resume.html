@@ -19,6 +19,9 @@
         </div>
         <div class="col-9 text-center">
             <p class="text-center">Используйте следующую форму для редактирования резюме:</p>
+            {% if comment %}
+            <p class="alert alert-danger">{{ comment }}</p>
+            {% endif %}
             <form action="." method="post" class="edit_resume visual_form">
                 {% csrf_token %}
                 {{ resume_form.as_p }}

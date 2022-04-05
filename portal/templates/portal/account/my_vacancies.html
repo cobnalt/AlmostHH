@@ -40,7 +40,11 @@
                             <td><a href="{% url 'portal:vacancy_detail' vac.id %}">{{ vac.title }}</a></td>
                             <td>{{ vac.salary }}</td>
                             <td>{{ vac.address }}</td>
+                            {% if vac.get_status_display == 'На доработку' %}
+                            <td><span class="badge bg-danger">{{ vac.get_status_display }}</span></td>
+                            {% else %}
                             <td>{{ vac.get_status_display }}</td>
+                            {% endif %}
                             <td><a href="{% url 'portal:edit_vacancy' vac.id %}"><i class="bi bi-pen-fill"></i></a></td>
                             <td><a href="{% url 'portal:delete_vacancy' vac.id %}"><i class="bi bi-x-circle-fill"></i></a></td>
                         </tr>

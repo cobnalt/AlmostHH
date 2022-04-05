@@ -38,7 +38,11 @@
                             <td>{{ forloop.counter }}</td>
                             <td><a href="{% url 'portal:resume_detail' resume.id %}">{{ resume.title }}</a></td>
                             <td>{{ resume.salary }}</td>
+                            {% if resume.get_status_display == 'На доработку' %}
+                            <td><span class="badge bg-danger">{{ resume.get_status_display }}</span></td>
+                            {% else %}
                             <td>{{ resume.get_status_display }}</td>
+                            {% endif %}
                             <td><a href="{% url 'portal:edit_resume' resume.id %}"><i class="bi bi-pen-fill"></i></a></td>
                             <td><a href="{% url 'portal:delete_resume' resume.id %}"><i class="bi bi-x-circle-fill"></i></a></td>
                         </tr>

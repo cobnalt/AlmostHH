@@ -173,7 +173,8 @@ def add_vacancy(request):
 @login_required
 @permission_required('portal.change_vacancy')
 def edit_vacancy(request, vacancy_id):
-    edit_vac = get_object_or_404(Vacancy, pk=vacancy_id)
+    edit_vac = get_object_or_404(Vacancy, pk=vacancy_id, company__user=request.user)
+    comment = edit_vac.comment
     if request.method == 'POST':
         vacancy_form = VacancyAddForm(instance=edit_vac, data=request.POST)
         if vacancy_form.is_valid():
@@ -189,13 +190,13 @@ def edit_vacancy(request, vacancy_id):
     else:
         vacancy_form = VacancyAddForm(instance=edit_vac)
     return render(request, 'portal/account/edit_vacancy.html',
-                  {'vacancy_form': vacancy_form})
+                  {'vacancy_form': vacancy_form, 'comment': comment})
 
 
 @login_required
 @permission_required('portal.delete_vacancy')
 def delete_vacancy(request, vacancy_id):
-    del_vac = get_object_or_404(Vacancy, pk=vacancy_id)
+    del_vac = get_object_or_404(Vacancy, pk=vacancy_id, company__user=request.user)
     if request.method == 'POST':
         del_vac.delete()
         messages.success(request, 'Вакансия удалена успешно.')
@@ -248,7 +249,8 @@ def add_resume(request):
 @login_required
 @permission_required('portal.change_resume')
 def edit_resume(request, resume_id):
-    edit_res = get_object_or_404(Resume, pk=resume_id)
+    edit_res = get_object_or_404(Resume, pk=resume_id, user=request.user)
+    comment = edit_res.comment
     try:
         exps = request.user.experiences.all()
     except Exception:
@@ -268,7 +270,7 @@ def edit_resume(request, resume_id):
     else:
         resume_form = ResumeAddForm(instance=edit_res)
     return render(request, 'portal/account/edit_resume.html',
-                  {'resume_form': resume_form, 'exps': exps})
+                  {'resume_form': resume_form, 'exps': exps, 'comment': comment})
 
 
 @login_required

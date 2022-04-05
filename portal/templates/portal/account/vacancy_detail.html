@@ -11,8 +11,13 @@
             </div>
         </div>
         <div class="col-9">
+            {% if perms.portal.change_vacancy and vacancy.company.user == request.user %}
+            {% if vacancy.comment %}
+            <p class="alert alert-danger">{{ vacancy.comment }}</p>
+            {% endif %}
+            {% endif %}
             <h1>{{ vacancy.title }}
-                {% if perms.portal.change_vacancy %}
+                {% if perms.portal.change_vacancy and vacancy.company.user == request.user %}
                 <span class="h6"><a href="{% url 'portal:edit_vacancy' vacancy.id %}">редактировать</a></span>
                 {% endif %}
             </h1>
