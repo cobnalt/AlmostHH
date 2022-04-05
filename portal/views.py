@@ -315,3 +315,15 @@ def edit_experience(request, experience_id):
 @permission_required('portal.delete_resume')
 def delete_experience(request, experience_id):
     pass
+
+
+@login_required()
+def find_resume(request):
+    resume = Resume.objects.all()
+    return render(request, 'portal/account/find_resume.html', {'section': 'find_resume', 'resume': resume})
+
+
+@login_required()
+def find_job(request):
+    job = Vacancy.objects.all()
+    return render(request, 'portal/account/find_job.html', {'section': 'find_job', 'job': job})

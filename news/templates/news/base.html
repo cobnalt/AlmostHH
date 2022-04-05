@@ -19,6 +19,11 @@
                     <div class="col-6">
                         <div class="enter text-end">
                             {% if request.user.is_authenticated %}
+                                {% if perms.portal.change_profile %}
+                                <a href="{% url 'portal:find_job' %}" {% if section == "find_job" %} class="selected"{% endif %}>Поиск вакансий</a>
+                                {% else %}
+                                <a href="{% url 'portal:find_resume' %}" {% if section == "find_resume" %} class="selected"{% endif %}>Поиск резюме</a>
+                                {% endif %}
                             <a href="{% url 'portal:dashboard' %}" {% if section == "dashboard" %} class="selected"{% endif %}>Рабочий стол</a>
                             <a href="{% url 'portal:private' %}" {% if section == "private" %} class="selected"{% endif %}>Личный кабинет</a>
                             <a href="{% url 'portal:logout' %}">Выйти</a>
