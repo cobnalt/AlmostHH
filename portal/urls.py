@@ -31,4 +31,7 @@ urlpatterns = [
          name='edit_experience'),
     path('delete_experience/<int:exp_id>/', views.delete_experience,
          name='delete_experience'),
+
+    path('find_resume/', views.find_resume, name='find_resume'),
+    path('find_job/', views.find_job, name='find_job'),
     ]

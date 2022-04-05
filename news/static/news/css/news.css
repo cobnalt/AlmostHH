@@ -101,3 +101,19 @@ form {
 .item_title > a {
     text-decoration: none;
 }
+
+.find_resume {
+    margin-top: 20px;
+    padding: 20px;
+    border: 0;
+    border-radius: 4px;
+    box-shadow: 0 2px 12px #edeff0;
+}
+
+.find_job {
+    margin-top: 20px;
+    padding: 20px;
+    border: 0;
+    border-radius: 4px;
+    box-shadow: 0 2px 12px #edeff0;
+}

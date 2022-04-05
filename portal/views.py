@@ -9,6 +9,7 @@ from .forms import LoginForm, UserRegistrationForm, UserEditForm, \
     ProfileEditForm, CompanyCardEditForm, VacancyAddForm, ResumeAddForm,\
     ExperienceAddForm
 from .models import CompanyCard, Profile, Vacancy, Resume, Experience
+from django.db.models import Q
 
 
 def user_login(request):
@@ -315,3 +316,27 @@ def edit_experience(request, experience_id):
 @permission_required('portal.delete_resume')
 def delete_experience(request, experience_id):
     pass
+
+
+@login_required()
+def find_resume(request):
+    query = request.GET.get('q')
+    if not query:
+        resume = Resume.objects.all()
+        return render(request, 'portal/account/find_resume.html', {'section': 'find_resume', 'resume': resume})
+    resume = Resume.objects.filter(
+        Q(title__icontains=query)
+    )
+    return render(request, 'portal/account/find_resume.html', {'section': 'find_resume', 'resume': resume})
+
+
+@login_required()
+def find_job(request):
+    query = request.GET.get('q')
+    if not query:
+        job = Vacancy.objects.all()
+        return render(request, 'portal/account/find_job.html', {'section': 'find_job', 'job': job})
+    job = Vacancy.objects.filter(
+        Q(title__icontains=query)
+    )
+    return render(request, 'portal/account/find_job.html', {'section': 'find_job', 'job': job})

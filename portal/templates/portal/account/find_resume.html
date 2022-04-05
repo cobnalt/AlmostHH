@@ -1,0 +1,31 @@
+{% extends "news/base.html" %}
+{% block title %} Поиск резюме {% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h1 class="text-center mb-3">Поиск резюме</h1>
+            <form method="get">
+              <input name="q" type="text" placeholder="Поиск...">
+              <button type="submit">Найти</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% for s_resume in resume %}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="find_resume">
+                    <h2>
+                        <a href="#">{{ s_resume.title }}</a>
+                    </h2>
+                    <p class="content"><small class="text-muted">{{ s_resume.user }}</small></p>
+                    <p class="content">{{ s_resume.salary}}</p>
+                    <p class="content">{{ s_resume.about_me | linebreaks}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+{% endblock %}
