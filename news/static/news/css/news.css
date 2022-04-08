@@ -119,3 +119,21 @@ form {
     width: 77%;
     display: inline-block;
 }
+
+.add_to_favorites {
+    cursor: pointer;
+    display: inline-block;
+    padding: 0.35em 0.65em;
+    font-size: .75em;
+    font-weight: 700;
+    line-height: 1;
+    color: blue;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem;
+    border: 1px solid #e77;
+}
+.added {
+    color: red;
+}

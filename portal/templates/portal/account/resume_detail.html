@@ -33,6 +33,11 @@
                 <span class="h6"><a href="{% url 'portal:edit_resume' resume.id %}">редактировать</a></span>
                 {% endif %}
             </h2>
+
+            {% if perms.portal.change_vacancy %}
+            {% include 'favorite/includes/add_to_favorites.html' with type='res' id=resume.id %}
+            {% endif %}
+
             <p class="h4 text-muted">{{ resume.salary }}</p>
             <p>Занятость: {{ resume.employment }}</p>
             <p>График работы: {{ resume.schedule }}</p>

@@ -22,6 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('news.urls', namespace='news')),
     path('portal/', include('portal.urls', namespace='portal')),
+    path('favorites/', include('favorite.urls', namespace='favorites')),
 ]
 
 if settings.DEBUG:

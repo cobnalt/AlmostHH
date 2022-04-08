@@ -1,0 +1,38 @@
+{% extends "news/base.html" %}
+{% block title %} Избранное {% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col text-center">
+
+            <h1 class="mb-3">Избранное </h1>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <div class="left-menu">
+
+                    {% include 'portal/account/includes/dashboard_menu.html' %}
+
+            </div>
+        </div>
+        <div class="col-9">
+            {% for item in res %}
+            <div class="res-item">
+                <p class="item_title"><a href="{% url 'portal:resume_detail' item.id %}">{{ item.title }}</a></p>
+                <p class="item_salary">{{ item.salary }}</p>
+            </div>
+            {% endfor %}
+            {% for item in vac %}
+            <div class="vac-item">
+                <p class="item_title"><a href="{% url 'portal:vacancy_detail' item.id %}">{{ item.title }}</a></p>
+                <p class="item_salary">{{ item.salary }}</p>
+                <p class="item_comp_title">{{ item.company.title }}</p>
+                <p class="item_comp_title">{{ item.address }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
