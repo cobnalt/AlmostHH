@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import CompanyCard, Vacancy, Profile, Resume, Experience
+from .models import CompanyCard, Vacancy, Profile, Resume, Experience,\
+    FeedbackAndSuggestion
 
 
 @admin.register(CompanyCard)
@@ -46,3 +47,8 @@ class ExperienceAdmin(admin.ModelAdmin):
     list_filter = ('organisation_name', 'user')
     search_fields = ('organisation_name', 'user')
     ordering = ('organisation_name',)
+
+
+@admin.register(FeedbackAndSuggestion)
+class FeedbackAndSuggestionAdmin(admin.ModelAdmin):
+    list_display = ('vacancy', 'resume', 'status')

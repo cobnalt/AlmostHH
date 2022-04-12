@@ -1,6 +1,6 @@
 <h4>Мои события</h4>
 <div class="list-group">
-    <a href="#" class="list-group-item list-group-item-action">Отклики и приглашения</a>
+    <a href="{% url 'portal:feedback_list' %}" class="list-group-item list-group-item-action">Отклики и приглашения</a>
     {% if perms.portal.change_profile %}
     <a href="{% url 'portal:my_resumes' %}" class="list-group-item list-group-item-action">Мои резюме</a>
     <a href="{% url 'favorites:favorites_list' %}" class="list-group-item list-group-item-action">Избранные вакансии</a>

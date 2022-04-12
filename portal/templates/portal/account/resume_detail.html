@@ -67,6 +67,12 @@
             <p>{{ resume.language }}</p>
             <h2 class="text-muted">Гражданство</h2>
             <p>{{ resume.citizenship }}</p>
+            {% if perms.portal.change_vacancy %}
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Пригласить
+            </button>
+            {% include 'portal/account/includes/feedback_resume.html' with type='vacancy' items=vacancies %}
+            {% endif %}
         </div>
     </div>
 </div>

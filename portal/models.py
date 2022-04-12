@@ -54,6 +54,9 @@ class Vacancy(models.Model):
     status = models.CharField(max_length=15, choices=STATUS_CHOICES,
                               default='draft',
                               verbose_name='Статус')
+    resumes = models.ManyToManyField('Resume', through='FeedbackAndSuggestion',
+                                     through_fields=('vacancy', 'resume'),
+                                     related_name='vacancies')
 
     def __str__(self):
         return self.title
@@ -128,3 +131,18 @@ class Profile(models.Model):
 
     def __str__(self):
         return f'Профиль для пользователя {self.user.username}'
+
+
+class FeedbackAndSuggestion(models.Model):
+    STATUS_CHOICES = (
+        ('send', 'Отправлено'),
+        ('viewed', 'Просмотрено'),
+        ('invite', 'Приглашение'),
+        ('failure', 'Отказ'),
+    )
+    vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE,
+                                related_name='suggestions', verbose_name='Вакансия')
+    resume = models.ForeignKey(Resume, on_delete=models.CASCADE,
+                               related_name='feedbacks', verbose_name='Резюме')
+    status = models.CharField(max_length=15, choices=STATUS_CHOICES,
+                              verbose_name='Статус', default='send')

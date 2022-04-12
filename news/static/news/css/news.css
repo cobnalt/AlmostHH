@@ -137,3 +137,14 @@ form {
 .added {
     color: red;
 }
+.feedback-item {
+    display: flex;
+    align-items: center;
+}
+.feedback-item .res-item, .feedback-item .vac-item {
+    flex-grow: 1;
+}
+.button-list {
+    display: flex;
+    justify-content: space-between;
+}

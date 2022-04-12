@@ -37,6 +37,12 @@
             <h2>Контактная информация</h2>
             <p>{{ vacancy.company.contact }}</p>
 
+            {% if perms.portal.change_resume %}
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Откликнуться
+            </button>
+            {% include 'portal/account/includes/feedback_resume.html' with type='resume' items=resumes %}
+            {% endif %}
         </div>
     </div>
 </div>

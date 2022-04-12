@@ -1,0 +1,71 @@
+{% extends "news/base.html" %}
+{% block title %}
+    {% if feedback.status == 'invite' %}
+        Приглашение
+    {% elif feedback.status == 'failure' %}
+        Отказ
+    {% else %}
+        Отклик
+    {% endif %}
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-3">
+            <div class="left-menu">
+
+                    {% include 'portal/account/includes/dashboard_menu.html' %}
+
+            </div>
+        </div>
+        <div class="col-9">
+            <h1>
+                {% if feedback.status == 'invite' %}
+                    Приглашение
+                {% elif feedback.status == 'failure' %}
+                    Отказ
+                {% else %}
+                    Отклик
+                {% endif %}
+            </h1>
+            <div class="vacancy-detail">
+                <h4 class="text-muted">Данные по вакансии</h4>
+                <h5>{{ feedback.vacancy.title }}</h5>
+                <p class="h5 text-muted">{{ feedback.vacancy.salary }}</p>
+                <h5>{{ feedback.vacancy.company.title }}</h5>
+                <h5>Адрес</h5>
+                <p>{{ feedback.vacancy.address }}</p>
+                <h5>Контактная информация</h5>
+                <p>{{ feedback.vacancy.company.contact }}</p>
+            </div>
+            <hr>
+            <div class="resume-detail">
+                <h4 class="text-muted">Данные по резюме</h4>
+                <h5>{{ feedback.resume.title }}</h5>
+                <p class="h5 text-muted">{{ feedback.resume.salary }}</p>
+                <p>Занятость: {{ feedback.resume.employment }}</p>
+                <p>График работы: {{ feedback.resume.schedule }}</p>
+                <h5 class="text-muted">Обо мне</h5>
+                <p>{{ feedback.resume.about_me | linebreaks }}</p>
+                <h5 class="text-muted">Высшее образование</h5>
+                <p>{{ feedback.resume.education }}</p>
+                <h5 class="text-muted">Знание языков</h5>
+                <p>{{ feedback.resume.language }}</p>
+                <h5 class="text-muted">Гражданство</h5>
+                <p>{{ feedback.resume.citizenship }}</p>
+            </div>
+            <hr>
+            {% if perms.portal.add_vacancy %}
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="button-list">
+                    <button type="submit" name="invite" class="btn btn-primary">Приглашение</button>
+                    <button type="submit" name="viewed" class="btn btn-secondary">Просмотрено</button>
+                    <button type="submit" name="failure" class="btn btn-danger">Отказ</button>
+                </div>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

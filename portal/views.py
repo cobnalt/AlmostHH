@@ -8,7 +8,8 @@ from django.utils.text import slugify
 from .forms import LoginForm, UserRegistrationForm, UserEditForm, \
     ProfileEditForm, CompanyCardEditForm, VacancyAddForm, ResumeAddForm,\
     ExperienceAddForm
-from .models import CompanyCard, Profile, Vacancy, Resume, Experience
+from .models import CompanyCard, Profile, Vacancy, Resume, Experience,\
+    FeedbackAndSuggestion
 from django.db.models import Q
 
 
@@ -143,8 +144,15 @@ def my_vacancies(request):
 @login_required
 def vacancy_detail(request, vacancy_id):
     vacancy = get_object_or_404(Vacancy, pk=vacancy_id)
+    resumes = Resume.objects.filter(status='published'). \
+        filter(user=request.user)
+    if request.method == 'POST':
+        resume = get_object_or_404(Resume, pk=request.POST.get('active_resume'))
+        FeedbackAndSuggestion.objects.create(vacancy=vacancy, resume=resume)
+        messages.success(request, 'Отклик отправлен успешно.')
+        return redirect('portal:vacancy_detail', vacancy_id=vacancy_id)
     return render(request, 'portal/account/vacancy_detail.html',
-                  {'vacancy': vacancy})
+                  {'vacancy': vacancy, 'resumes': resumes})
 
 
 @login_required
@@ -217,8 +225,17 @@ def my_resumes(request):
 @login_required
 def resume_detail(request, resume_id):
     resume = get_object_or_404(Resume, pk=resume_id)
+    vacancies = Vacancy.objects.filter(status='published'). \
+        filter(company__user=request.user)
+    if request.method == 'POST':
+        vacancy = get_object_or_404(Vacancy,
+                                    pk=request.POST.get('active_vacancy'))
+        FeedbackAndSuggestion.objects.create(vacancy=vacancy, resume=resume,
+                                             status='invite')
+        messages.success(request, 'Приглашение успешно отправлено.')
+        return redirect('portal:resume_detail', resume_id=resume_id)
     return render(request, 'portal/account/resume_detail.html',
-                  {'resume': resume})
+                  {'resume': resume, 'vacancies': vacancies})
 
 
 @login_required
@@ -321,7 +338,7 @@ def delete_experience(request, experience_id):
 @login_required()
 def find_resume(request):
     query = request.GET.get('q')
-    resume = Resume.objects.all().filter(status='published')
+    resume = Resume.objects.filter(status='published')
     if not query:
         return render(request, 'portal/account/find_resume.html', {'resume': resume})
     resume = resume.filter(title__icontains=query)
@@ -331,8 +348,37 @@ def find_resume(request):
 @login_required()
 def find_job(request):
     query = request.GET.get('q')
-    job = Vacancy.objects.all().filter(status='published')
+    job = Vacancy.objects.filter(status='published')
     if not query:
         return render(request, 'portal/account/find_job.html', {'job': job})
     job = job.filter(title__icontains=query)
     return render(request, 'portal/account/find_job.html', {'job': job})
+
+
+@login_required()
+def feedback_list(request):
+    if request.user.has_perm('portal.add_resume'):
+        feedbacks = FeedbackAndSuggestion.objects.filter(resume__user=request.user)
+    else:
+        feedbacks = FeedbackAndSuggestion.objects.filter(
+            vacancy__company__user=request.user)
+    return render(request, 'portal/account/feedback_list.html',
+                  {'feedbacks': feedbacks})
+
+
+@login_required()
+def feedback_detail(request, feedback_id):
+    feed = get_object_or_404(FeedbackAndSuggestion, pk=feedback_id)
+    if request.method == 'POST':
+        if 'invite' in request.POST:
+            feed.status = 'invite'
+            feed.save()
+        elif 'failure' in request.POST:
+            feed.status = 'failure'
+            feed.save()
+        else:
+            feed.status = 'viewed'
+            feed.save()
+        return redirect('portal:feedback_list')
+    return render(request, 'portal/account/feedback_detail.html',
+                  {'feedback': feed})

@@ -1,0 +1,55 @@
+{% extends "news/base.html" %}
+{% block title %} Отклики и приглашения {% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col text-center">
+
+            <h1 class="mb-3">Отклики и приглашения </h1>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <div class="left-menu">
+
+                    {% include 'portal/account/includes/dashboard_menu.html' %}
+
+            </div>
+        </div>
+        <div class="col-9">
+            <div class="feedback">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Наименование вакансии</th>
+                            <th>Наименование резюме</th>
+                            <th>Статус</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for feedback in feedbacks %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td><a href="{% url 'portal:vacancy_detail' feedback.vacancy.id %}">{{ feedback.vacancy.title }}</a></td>
+                            <td><a href="{% url 'portal:resume_detail' feedback.resume.id %}">{{ feedback.resume.title }}</a></td>
+                            {% if feedback.status == 'failure' %}
+                            <td><span class="badge bg-danger">{{ feedback.get_status_display }}</span></td>
+                            {% elif feedback.status == 'invite' %}
+                            <td><span class="badge bg-primary">{{ feedback.get_status_display }}</span></td>
+                            {% else %}
+                            <td>{{ feedback.get_status_display }}</td>
+                            {% endif %}
+                            <td><a href="{% url 'portal:feedback_detail' feedback.id %}"><i class="bi bi-eye-fill"></i></a></td>
+                        </tr>
+                        {% empty %}
+                        <h5>Пока еще не добавлено ни одного Отклика или приглашения</h5>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

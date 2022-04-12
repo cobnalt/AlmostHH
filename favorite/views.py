@@ -11,11 +11,10 @@ def favorites_list(request):
     res = None
     vac = None
     if fav:
-        for item in fav:
-            res = [get_object_or_404(Resume, pk=item['id']) for item in
-                   fav if item['type'] == 'res']
-            vac = [get_object_or_404(Vacancy, pk=item['id']) for item in
-                   fav if item['type'] == 'vac']
+        res = [get_object_or_404(Resume, pk=item['id']) for item in
+               fav if item['type'] == 'res']
+        vac = [get_object_or_404(Vacancy, pk=item['id']) for item in
+               fav if item['type'] == 'vac']
     return render(request, 'favorite/favorites_list.html',
                   {'res': res, 'vac': vac})
 

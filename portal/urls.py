@@ -34,4 +34,7 @@ urlpatterns = [
 
     path('find_resume/', views.find_resume, name='find_resume'),
     path('find_job/', views.find_job, name='find_job'),
+
+    path('feedback-and-suggestion/', views.feedback_list, name='feedback_list'),
+    path('feedback-and-suggestion/<int:feedback_id>/', views.feedback_detail, name='feedback_detail'),
     ]
