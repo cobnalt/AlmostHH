@@ -21,3 +21,7 @@ def news_list(request):
 def news_detail(request, news):
     news = get_object_or_404(News, slug=news)
     return render(request, 'news/news/detail.html', {'news': news})
+
+
+def rules(request):
+    return render(request, 'news/news/rules.html')

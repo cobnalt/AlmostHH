@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.utils.text import slugify
 from .forms import LoginForm, UserRegistrationForm, UserEditForm, \
     ProfileEditForm, CompanyCardEditForm, VacancyAddForm, ResumeAddForm,\
-    ExperienceAddForm
+    ExperienceAddForm,ExperienceFormSet
 from .models import CompanyCard, Profile, Vacancy, Resume, Experience,\
     FeedbackAndSuggestion
 from django.db.models import Q
@@ -241,14 +241,19 @@ def resume_detail(request, resume_id):
 @login_required
 @permission_required('portal.add_resume')
 def add_resume(request):
-    try:
-        exps = request.user.experiences.all()
-    except Exception:
-        exps = None
+    queryset = request.user.experiences.all()
+    exp_formset = ExperienceFormSet(queryset=queryset)
     if request.method == 'POST':
         resume_form = ResumeAddForm(request.POST)
-        if resume_form.is_valid():
+        formset = ExperienceFormSet(request.POST, queryset=queryset)
+        if resume_form.is_valid() and formset.is_valid():
             new_resume = resume_form.save(commit=False)
+            formset.save(commit=False)
+            for form in formset:
+                if form.cleaned_data:
+                    new_exp = form.save(commit=False)
+                    new_exp.user = request.user
+                    new_exp.save()
             new_resume.slug = slugify(new_resume.title)
             new_resume.user = request.user
             new_resume.status = 'send' if 'moderate' in request.POST else 'draft'
@@ -261,7 +266,7 @@ def add_resume(request):
         resume_form = ResumeAddForm()
     return render(request, 'portal/account/add_resume.html',
                   {'resume_form': resume_form,
-                   'experiences': exps})
+                   'exp_formset': exp_formset})
 
 
 @login_required
@@ -269,14 +274,19 @@ def add_resume(request):
 def edit_resume(request, resume_id):
     edit_res = get_object_or_404(Resume, pk=resume_id, user=request.user)
     comment = edit_res.comment
-    try:
-        exps = request.user.experiences.all()
-    except Exception:
-        exps = None
+    queryset = request.user.experiences.all()
+    exp_formset = ExperienceFormSet(queryset=queryset)
     if request.method == 'POST':
         resume_form = ResumeAddForm(instance=edit_res, data=request.POST)
-        if resume_form.is_valid():
+        formset = ExperienceFormSet(request.POST, queryset=queryset)
+        if resume_form.is_valid() and formset.is_valid():
             new_resume = resume_form.save(commit=False)
+            formset.save(commit=False)
+            for form in formset:
+                if form.cleaned_data:
+                    new_exp = form.save(commit=False)
+                    new_exp.user = request.user
+                    new_exp.save()
             new_resume.slug = slugify(new_resume.title)
             new_resume.user = request.user
             new_resume.status = 'send' if 'moderate' in request.POST else 'draft'
@@ -287,8 +297,10 @@ def edit_resume(request, resume_id):
             messages.error(request, 'Ошибка при редактировании резюме')
     else:
         resume_form = ResumeAddForm(instance=edit_res)
+
     return render(request, 'portal/account/edit_resume.html',
-                  {'resume_form': resume_form, 'exps': exps, 'comment': comment})
+                  {'resume_form': resume_form,
+                   'comment': comment, 'exp_formset': exp_formset})
 
 
 @login_required

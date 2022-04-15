@@ -95,4 +95,30 @@ function get_session_favorites() {
 $(document).ready(function(){
     add_to_favorites();
     get_session_favorites();
+
+    $("#id_address").suggestions({
+        token: "99767383f97ee605594a85d9714f70f3655a278f",
+        type: "ADDRESS",
+        /* Вызывается, когда пользователь выбирает одну из подсказок */
+        onSelect: function(suggestion) {
+            console.log(suggestion);
+        }
+    });
+
+    $(function () {
+        $("#id_date_of_birth, input[id$='-finish'], input[id$='-start']").datepicker({
+          format:'dd.mm.yyyy',
+    });
+  });
+
+    $(function() {
+        $('.exp-formset .exp-formset-item').formset({
+            addText: 'Добавить',
+            deleteText: 'Удалить',
+            addCssClass: 'btn btn-primary mt-1',
+            deleteCssClass: 'btn btn-danger',
+            hideLastAddForm: true,
+        });
+    })
+
 })

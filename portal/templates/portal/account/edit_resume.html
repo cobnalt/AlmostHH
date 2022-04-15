@@ -26,23 +26,14 @@
                 {% csrf_token %}
                 {{ resume_form.as_p }}
                 <h2 class="text-muted">Опыт работы</h2>
-            <div class="experience">
-                {% if exps %}
-                {% for exp in exps %}
-                <div class="work_exp__item">
-                    <div class="work_exp__date">
-                        {{ exp.finish }} - {{ exp.start }}
+                <div class="exp-formset">
+                   {{ exp_formset.management_form }}
+                    {% for form in exp_formset %}
+                    <div class="exp-formset-item">
+                        {{ form }}
                     </div>
-                    <div class="work_exp__descr">
-                        <p class="mb-3"><strong>{{ exp.organisation_name }}</strong></p>
-                        <p><strong>{{ exp.position }}</strong></p>
-                        <p>{{ exp.function }}</p>
-                    </div>
+                    {% endfor %}
                 </div>
-                <hr>
-                {% endfor %}
-                {% endif %}
-            </div>
                 <div class="form-buttons mt-3">
                     <button type="submit" class="btn btn-outline-primary" name="save">Сохранить</button>
                     <button type="submit" class="btn btn-outline-primary" name="moderate">Отправить на модерацию</button>

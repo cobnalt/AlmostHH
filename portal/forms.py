@@ -1,7 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
 from .models import CompanyCard, Vacancy, Profile, Resume, Experience
-from datetime import datetime
 
 
 class LoginForm(forms.Form):
@@ -22,7 +21,7 @@ class UserRegistrationForm(forms.ModelForm):
     def clean_password2(self):
         cd = self.cleaned_data
         if cd['password'] != cd['password2']:
-            raise forms.ValidationError('Passwords don\'t match.')
+            raise forms.ValidationError('Пароли не совпадают.')
         return cd['password2']
 
 
@@ -45,7 +44,7 @@ class CompanyCardEditForm(forms.ModelForm):
 
 
 class ProfileEditForm(forms.ModelForm):
-    date_of_birth = forms.DateField(widget=forms.SelectDateWidget(years=range(1950, 2020)))
+    date_of_birth = forms.DateField(input_formats=['%d.%m.%Y'])
 
     class Meta:
         model = Profile
@@ -60,12 +59,16 @@ class ResumeAddForm(forms.ModelForm):
 
 
 class ExperienceAddForm(forms.ModelForm):
-    start = forms.DateField(
-        widget=forms.SelectDateWidget(years=range(1970, datetime.now().year+1)))
-    finish = forms.DateField(
-        widget=forms.SelectDateWidget(years=range(1970, datetime.now().year+1)))
+    start = forms.DateField(input_formats=['%d.%m.%Y'], label='Начало')
+    finish = forms.DateField(input_formats=['%d.%m.%Y'], label='Окончание')
 
     class Meta:
         model = Experience
         fields = ('until_now', 'finish', 'start', 'organisation_name',
                   'position', 'function')
+
+
+ExperienceFormSet = forms.modelformset_factory(Experience,
+                                               form=ExperienceAddForm,
+                                               can_delete=True,
+                                               extra=1)
