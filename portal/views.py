@@ -7,9 +7,9 @@ from django.contrib import messages
 from django.utils.text import slugify
 from .forms import LoginForm, UserRegistrationForm, UserEditForm, \
     ProfileEditForm, CompanyCardEditForm, VacancyAddForm, ResumeAddForm,\
-    ExperienceAddForm,ExperienceFormSet
+    ExperienceAddForm,ExperienceFormSet, MessageForm
 from .models import CompanyCard, Profile, Vacancy, Resume, Experience,\
-    FeedbackAndSuggestion
+    FeedbackAndSuggestion, Message
 from django.db.models import Q
 
 
@@ -381,16 +381,39 @@ def feedback_list(request):
 @login_required()
 def feedback_detail(request, feedback_id):
     feed = get_object_or_404(FeedbackAndSuggestion, pk=feedback_id)
+    feed_messages = feed.messages.all().order_by('-created')
     if request.method == 'POST':
+        mes_text = request.POST.get('message_copy').strip() if\
+            request.POST.get('message_copy') else None
         if 'invite' in request.POST:
+            if mes_text:
+                Message.objects.create(text=mes_text, feedback=feed,
+                                       sender=request.user)
             feed.status = 'invite'
             feed.save()
         elif 'failure' in request.POST:
+            if mes_text:
+                Message.objects.create(text=mes_text, feedback=feed,
+                                       sender=request.user)
             feed.status = 'failure'
             feed.save()
+        elif 'send' in request.POST:
+            message_form = MessageForm(request.POST)
+            if message_form.is_valid():
+                message = message_form.save(commit=False)
+                message.feedback = feed
+                message.sender = request.user
+                message.save()
+                messages.success(request, 'Сообщение отослано успешно')
         else:
+            if mes_text:
+                Message.objects.create(text=mes_text, feedback=feed,
+                                       sender=request.user)
             feed.status = 'viewed'
             feed.save()
         return redirect('portal:feedback_list')
+    else:
+        message_form = MessageForm()
     return render(request, 'portal/account/feedback_detail.html',
-                  {'feedback': feed})
+                  {'feedback': feed, 'feed_messages': feed_messages,
+                   'message_form': message_form})

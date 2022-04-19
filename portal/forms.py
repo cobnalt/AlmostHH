@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import CompanyCard, Vacancy, Profile, Resume, Experience
+from .models import CompanyCard, Vacancy, Profile, Resume, Experience, Message
 
 
 class LoginForm(forms.Form):
@@ -72,3 +72,12 @@ ExperienceFormSet = forms.modelformset_factory(Experience,
                                                form=ExperienceAddForm,
                                                can_delete=True,
                                                extra=1)
+
+
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ('text',)
+        labels = {'text': 'Текст сообщения'}
+        widgets = {'text': forms.widgets.Textarea(attrs={'class': 'form-control',
+                                                         'rows': 3})}

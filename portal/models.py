@@ -146,3 +146,22 @@ class FeedbackAndSuggestion(models.Model):
                                related_name='feedbacks', verbose_name='Резюме')
     status = models.CharField(max_length=15, choices=STATUS_CHOICES,
                               verbose_name='Статус', default='send')
+
+    def __str__(self):
+        return f'Feedback {self.id}'
+
+
+class Message(models.Model):
+    text = models.TextField(max_length=1000, verbose_name='Текст', blank=True)
+    sender = models.ForeignKey(User, on_delete=models.CASCADE,
+                               related_name='user_messages',
+                               verbose_name='Отправитель',
+                               blank=True, null=True)
+    feedback = models.ForeignKey(FeedbackAndSuggestion,
+                                 on_delete=models.CASCADE,
+                                 related_name='messages',
+                                 verbose_name='Отклик')
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Message {self.id}'

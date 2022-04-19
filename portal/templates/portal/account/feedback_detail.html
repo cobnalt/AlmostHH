@@ -55,10 +55,46 @@
                 <p>{{ feedback.resume.citizenship }}</p>
             </div>
             <hr>
+            {% if request.user.is_authenticated %}
+                {% if feed_messages %}
+                <div class="messages-list">
+                    {% for message in feed_messages %}
+                    {% if message.sender == request.user %}
+                    <div class="message_single card text-dark bg-light mb-3" style="max-width: 30rem;">
+                        <div class="card-body">
+                            {{ message.text }}
+                        </div>
+                       <div class="card-footer text-muted">
+                                <small>Вы {{ message.created }}</small>
+                       </div>
+                    </div>
+                     {% else %}
+                    <div class="message_single card text-dark bg-info mb-3" style="max-width: 30rem;">
+                        <div class="card-body">
+                            {{ message.text }}
+                        </div>
+                       <div class="card-footer">
+                            <small>Вам {{ message.created }}</small>
+                       </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <form action="" method="post" name="send_message" class="send_message" id="feed_send_form">
+                    {% csrf_token %}
+                    {{ message_form.as_p }}
+                    <div class="invalid-feedback">
+                        Please enter a message in the textarea.
+                    </div>
+                    <button type="submit" name="send" class="btn btn-primary mt-3">Отослать</button>
+                </form>
+            {% endif %}
             {% if perms.portal.add_vacancy %}
-            <form action="" method="post">
+            <form action="" method="post" id="feed_submit">
                 {% csrf_token %}
                 <div class="button-list">
+                    <input type="hidden" name="message_copy">
                     <button type="submit" name="invite" class="btn btn-primary">Приглашение</button>
                     <button type="submit" name="viewed" class="btn btn-secondary">Просмотрено</button>
                     <button type="submit" name="failure" class="btn btn-danger">Отказ</button>

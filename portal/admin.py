@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import CompanyCard, Vacancy, Profile, Resume, Experience,\
-    FeedbackAndSuggestion
+    FeedbackAndSuggestion, Message
 
 
 @admin.register(CompanyCard)
@@ -52,3 +52,9 @@ class ExperienceAdmin(admin.ModelAdmin):
 @admin.register(FeedbackAndSuggestion)
 class FeedbackAndSuggestionAdmin(admin.ModelAdmin):
     list_display = ('vacancy', 'resume', 'status')
+
+
+@admin.register(Message)
+class MessageAdmin(admin.ModelAdmin):
+    list_display = ('feedback', 'sender', 'created')
+    list_filter = ('feedback', 'sender')

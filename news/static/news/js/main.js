@@ -121,4 +121,17 @@ $(document).ready(function(){
         });
     })
 
+    $('#feed_submit').submit(function(e){
+        text = $('#id_text').val();
+        $('input[name="message_copy"]').val(text);
+    });
+
+    $('#feed_send_form').submit(function(e){
+        text = $('#id_text').val().trim();
+        if (text.length == 0) {
+            e.preventDefault();
+            $('.invalid-feedback').show('fast').hide(4000);
+            return
+        }
+    });
 })

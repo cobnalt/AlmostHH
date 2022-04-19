@@ -91,7 +91,7 @@ form {
     border-radius: 4px;
     box-shadow: 0 2px 12px #edeff0;
 }
-.vac-item > p {
+.vac-item > p, .send_message > p {
     margin-bottom: 0;
 }
 .item_salary, .item_title > a {
