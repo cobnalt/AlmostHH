@@ -1,6 +1,14 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import CompanyCard, Vacancy, Profile, Resume, Experience, Message
+
+from .models import (
+    CompanyCard,
+    Experience,
+    Message,
+    Profile,
+    Resume,
+    Vacancy,
+)
 
 
 class LoginForm(forms.Form):
