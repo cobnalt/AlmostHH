@@ -138,7 +138,8 @@ def edit_company_card(request):
 @permission_required('portal.add_vacancy')
 def my_vacancies(request):
     vacs = Vacancy.objects.filter(company=request.user.companycard)
-    return render(request, 'portal/account/my_vacancies.html', {'vacs': vacs})
+    return render(request, 'portal/account/my_vacancies.html',
+                  {'vacs': vacs, 'left_menu': 'my_vacs'})
 
 
 @login_required
@@ -219,7 +220,8 @@ def delete_vacancy(request, vacancy_id):
 @permission_required('portal.add_resume')
 def my_resumes(request):
     resumes = Resume.objects.filter(user=request.user)
-    return render(request, 'portal/account/my_resumes.html', {'resumes': resumes})
+    return render(request, 'portal/account/my_resumes.html',
+                  {'resumes': resumes, 'left_menu': 'my_resumes'})
 
 
 @login_required
@@ -375,7 +377,7 @@ def feedback_list(request):
         feedbacks = FeedbackAndSuggestion.objects.filter(
             vacancy__company__user=request.user)
     return render(request, 'portal/account/feedback_list.html',
-                  {'feedbacks': feedbacks})
+                  {'feedbacks': feedbacks, 'left_menu': 'feed'})
 
 
 @login_required()

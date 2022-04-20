@@ -16,7 +16,7 @@ def favorites_list(request):
         vac = [get_object_or_404(Vacancy, pk=item['id']) for item in
                fav if item['type'] == 'vac']
     return render(request, 'favorite/favorites_list.html',
-                  {'res': res, 'vac': vac})
+                  {'res': res, 'vac': vac, 'left_menu': 'favs'})
 
 
 @login_required()
