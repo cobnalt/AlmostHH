@@ -1,7 +1,8 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect, get_object_or_404
-from portal.models import Resume, Vacancy
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+
+from portal.models import Resume, Vacancy
 
 
 @login_required()

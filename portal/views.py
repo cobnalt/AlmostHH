@@ -1,16 +1,17 @@
-from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import Group
-from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
-from django.utils.text import slugify
-from .forms import LoginForm, UserRegistrationForm, UserEditForm, \
-    ProfileEditForm, CompanyCardEditForm, VacancyAddForm, ResumeAddForm,\
-    ExperienceAddForm,ExperienceFormSet, MessageForm
-from .models import CompanyCard, Profile, Vacancy, Resume, Experience,\
-    FeedbackAndSuggestion, Message
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.models import Group
 from django.db.models import Q
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.text import slugify
+
+from .forms import (CompanyCardEditForm, ExperienceAddForm, ExperienceFormSet,
+                    LoginForm, MessageForm, ProfileEditForm, ResumeAddForm,
+                    UserEditForm, UserRegistrationForm, VacancyAddForm)
+from .models import (CompanyCard, Experience, FeedbackAndSuggestion, Message,
+                     Profile, Resume, Vacancy)
 
 
 def user_login(request):

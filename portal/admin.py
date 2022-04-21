@@ -1,6 +1,14 @@
 from django.contrib import admin
-from .models import CompanyCard, Vacancy, Profile, Resume, Experience,\
-    FeedbackAndSuggestion, Message
+
+from .models import (
+    CompanyCard,
+    Experience,
+    FeedbackAndSuggestion,
+    Message,
+    Profile,
+    Resume,
+    Vacancy,
+)
 
 
 @admin.register(CompanyCard)
