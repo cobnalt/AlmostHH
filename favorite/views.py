@@ -45,6 +45,7 @@ def add_to_favorites(request):
         data = {
             'type': request.POST.get('type'),
             'id': request.POST.get('id'),
+            'count': len(request.session['favorites']),
         }
         request.session.modified = True
         return JsonResponse(data)
@@ -72,6 +73,8 @@ def remove_from_favorites(request):
         data = {
             'type': request.POST.get('type'),
             'id': request.POST.get('id'),
+            'count': 0 if not request.session.get('favorites')
+            else len(request.session['favorites']),
         }
         request.session.modified = True
         return JsonResponse(data)

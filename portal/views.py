@@ -146,8 +146,10 @@ def my_vacancies(request):
 @login_required
 def vacancy_detail(request, vacancy_id):
     vacancy = get_object_or_404(Vacancy, pk=vacancy_id)
-    resumes = Resume.objects.filter(status='published'). \
-        filter(user=request.user)
+    resumes = Resume.objects.filter(user=request.user).\
+        filter(status='published')
+    vac_feed = FeedbackAndSuggestion.objects.filter(vacancy=vacancy)
+    resumes = resumes.exclude(feedbacks__in=vac_feed)
     if request.method == 'POST':
         resume = get_object_or_404(Resume, pk=request.POST.get('active_resume'))
         FeedbackAndSuggestion.objects.create(vacancy=vacancy, resume=resume)
@@ -228,8 +230,10 @@ def my_resumes(request):
 @login_required
 def resume_detail(request, resume_id):
     resume = get_object_or_404(Resume, pk=resume_id)
-    vacancies = Vacancy.objects.filter(status='published'). \
-        filter(company__user=request.user)
+    vacancies = Vacancy.objects.filter(company__user=request.user). \
+        filter(status='published')
+    res_feed = FeedbackAndSuggestion.objects.filter(resume=resume)
+    vacancies = vacancies.exclude(suggestions__in=res_feed)
     if request.method == 'POST':
         vacancy = get_object_or_404(Vacancy,
                                     pk=request.POST.get('active_vacancy'))

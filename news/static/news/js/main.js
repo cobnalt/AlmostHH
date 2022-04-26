@@ -53,6 +53,7 @@ function add_to_favorites() {
                     success: (data) => {
                         $(el).removeClass(added_to_favorites_class);
                         $(el).text('Добавить в избранное');
+                        $('#favorites > span').text(data.count);
                     }
                 })
             } else {
@@ -67,6 +68,7 @@ function add_to_favorites() {
                     success: (data) => {
                         $(el).addClass(added_to_favorites_class);
                         $(el).text('Убрать из избранного');
+                        $('#favorites > span').text(data.count);
                     }
                 })
             }
@@ -77,6 +79,7 @@ function add_to_favorites() {
 function get_session_favorites() {
     $.getJSON(favorites_api_url, (json) => {
         if(json !== null) {
+            $('#favorites > span').text(json.length);
             for(let i = 0; i < json.length; i++){
                 $('.add_to_favorites').each((index, el) => {
                     const type = $(el).data('type');

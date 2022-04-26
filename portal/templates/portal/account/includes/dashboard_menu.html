@@ -1,11 +1,12 @@
+{% load portal_tags %}
 <h4>Мои события</h4>
 <div class="list-group">
-    <a href="{% url 'portal:feedback_list' %}" class="list-group-item list-group-item-action {% if left_menu == 'feed' %} active {% endif %}">Отклики и приглашения</a>
+    <a href="{% url 'portal:feedback_list' %}" class="list-group-item list-group-item-action {% if left_menu == 'feed' %} active {% endif %}">Отклики и приглашения <span class="badge bg-secondary">{% total_feeds request.user %}</span></a>
     {% if perms.portal.change_profile %}
-    <a href="{% url 'portal:my_resumes' %}" class="list-group-item list-group-item-action {% if left_menu == 'my_resumes' %} active {% endif %}">Мои резюме</a>
-    <a href="{% url 'favorites:favorites_list' %}" class="list-group-item list-group-item-action {% if left_menu == 'favs' %} active {% endif %}">Избранные вакансии</a>
+    <a href="{% url 'portal:my_resumes' %}" class="list-group-item list-group-item-action {% if left_menu == 'my_resumes' %} active {% endif %}">Мои резюме <span class="badge bg-secondary">{% total_resumes request.user %}</span></a>
+    <a href="{% url 'favorites:favorites_list' %}" id="favorites" class="list-group-item list-group-item-action {% if left_menu == 'favs' %} active {% endif %}">Избранные вакансии <span class="badge bg-secondary"> 0 </span></a>
     {% else %}
-    <a href="{% url 'portal:my_vacancies' %}" class="list-group-item list-group-item-action {% if left_menu == 'my_vacs' %} active {% endif %}">Мои вакансии</a>
-    <a href="{% url 'favorites:favorites_list' %}" class="list-group-item list-group-item-action {% if left_menu == 'favs' %} active {% endif %}">Избранные резюме</a>
+    <a href="{% url 'portal:my_vacancies' %}" class="list-group-item list-group-item-action {% if left_menu == 'my_vacs' %} active {% endif %}">Мои вакансии <span class="badge bg-secondary">{% total_vacancies request.user %}</span></a>
+    <a href="{% url 'favorites:favorites_list' %}" id="favorites" class="list-group-item list-group-item-action {% if left_menu == 'favs' %} active {% endif %}">Избранные резюме <span class="badge bg-secondary"> 0 </span></a>
     {% endif %}
 </div>
