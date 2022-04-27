@@ -23,6 +23,7 @@ urlpatterns = [
     path('', include('news.urls', namespace='news')),
     path('portal/', include('portal.urls', namespace='portal')),
     path('favorites/', include('favorite.urls', namespace='favorites')),
+    path('tinymce/', include('tinymce.urls')),
 ]
 
 if settings.DEBUG:

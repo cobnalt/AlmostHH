@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth.models import User
 
+from tinymce.widgets import TinyMCE
+
 from .models import (
     CompanyCard,
     Experience,
@@ -34,6 +36,10 @@ class UserRegistrationForm(forms.ModelForm):
 
 
 class VacancyAddForm(forms.ModelForm):
+    description = forms.CharField(widget=TinyMCE(attrs={'cols': 80,
+                                                        'rows': 30}),
+                                  label='Описание')
+
     class Meta:
         model = Vacancy
         fields = ('title', 'salary', 'description', 'address')
@@ -52,7 +58,8 @@ class CompanyCardEditForm(forms.ModelForm):
 
 
 class ProfileEditForm(forms.ModelForm):
-    date_of_birth = forms.DateField(input_formats=['%d.%m.%Y'])
+    date_of_birth = forms.DateField(input_formats=['%d.%m.%Y'],
+                                    label='Дата рождения')
 
     class Meta:
         model = Profile
@@ -60,6 +67,9 @@ class ProfileEditForm(forms.ModelForm):
 
 
 class ResumeAddForm(forms.ModelForm):
+    about_me = forms.CharField(widget=TinyMCE(attrs={'cols': 80, 'rows': 30}),
+                               label='Обо мне')
+
     class Meta:
         model = Resume
         fields = ('title', 'salary', 'employment', 'schedule', 'about_me',

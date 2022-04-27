@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'news.apps.NewsConfig',
     'favorite.apps.FavoriteConfig',
+    'tinymce',
 ]
 
 MIDDLEWARE = [
