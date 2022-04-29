@@ -3,21 +3,51 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
 from portal.models import Resume, Vacancy
+from django.views.generic import CreateView, DetailView, TemplateView, ListView
+
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+# TODO на уровне моделей реализовать?
+class SessionHandlerMixin():
+    SLANG = {'response_key': 'favorites',
+             'key_word': 'type',
+             'model_key': 'id'}
+
+    def __call__(self, *args):
+        response, model, key_word = args
+        result = response.get(self.SLANG['response_key'])
+        if result:
+            result = filter(lambda x: x[self.SLANG['key_word']] == key_word, result)
+
+        return [get_object_or_404(model, pk=item[self.SLANG['model_key']])
+                  for item in result] if result else None
 
 
-@login_required()
-def favorites_list(request):
-    fav = None if not request.session.get('favorites') else request.session[
-        'favorites']
-    res = None
-    vac = None
-    if fav:
-        res = [get_object_or_404(Resume, pk=item['id']) for item in
-               fav if item['type'] == 'res']
-        vac = [get_object_or_404(Vacancy, pk=item['id']) for item in
-               fav if item['type'] == 'vac']
-    return render(request, 'favorite/favorites_list.html',
-                  {'res': res, 'vac': vac, 'left_menu': 'favs'})
+class FavoritesList(LoginRequiredMixin, SessionHandlerMixin, TemplateView):
+    template_name = 'favorite/favorites_list.html'
+
+    def get(self, request, *args, **kwargs):
+        resume = self.__call__(request.session, Resume, 'res')
+        vacancy = self.__call__(request.session, Vacancy, 'vac')
+
+        return render(request, self.template_name,
+                      {'res': resume, 'vac': vacancy, 'left_menu': 'favs'})
+
+
+# @login_required()
+# def favorites_list(request):
+#     fav = None if not request.session.get('favorites') else request.session[
+#         'favorites']
+#     res = filter(lambda x: x['type'] == 'res', request.session['favorites'])
+#     vac = filter(lambda x: x['type'] == 'vac', request.session['favorites'])
+#     if fav:
+#         res = [get_object_or_404(Resume, pk=item['id']) for item in
+#                res]
+#         vac = [get_object_or_404(Vacancy, pk=item['id']) for item in
+#                vac]
+#     print(res, vac)
+#     return render(request, 'favorite/favorites_list.html',
+#                   {'res': res, 'vac': vac, 'left_menu': 'favs'})
 
 
 @login_required()
@@ -58,7 +88,7 @@ def remove_from_favorites(request):
     if request.method == 'POST':
         for item in request.session['favorites']:
             if item['type'] == request.POST.get('type') and item[
-                    'id'] == request.POST.get('id'):
+                'id'] == request.POST.get('id'):
                 item.clear()
 
         while {} in request.session['favorites']:

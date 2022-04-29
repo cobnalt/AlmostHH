@@ -1,9 +1,9 @@
-from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from django.shortcuts import get_object_or_404, render
+# from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+# from django.shortcuts import get_object_or_404, render
 
 from .models import News
 
-from django.http import HttpResponseRedirect
+# from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView, ListView, DetailView
 
 
