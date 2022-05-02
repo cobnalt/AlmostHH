@@ -5,37 +5,24 @@ from django.shortcuts import get_object_or_404, redirect, render
 from portal.models import Resume, Vacancy
 from django.views.generic import TemplateView
 
-
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-# TODO на уровне моделей реализовать?
-class SessionHandlerMixin():
-    SLANG = {'response_key': 'favorites',
-             'key_word': 'type',
-             'model_key': 'id'}
-
-    def __call__(self, *args):
-        response, model, key_word = args
-        result = response.get(self.SLANG['response_key'])
-        if result:
-            result = filter(lambda x: x[self.SLANG['key_word']] == key_word,
-                            result)
-
-        return [get_object_or_404(model, pk=item[self.SLANG['model_key']])
-                for item in result] if result else None
-
-
-class FavoritesList(LoginRequiredMixin, SessionHandlerMixin, TemplateView):
+class FavoritesList(LoginRequiredMixin, TemplateView):
     template_name = 'favorite/favorites_list.html'
 
-    def get(self, request, *args, **kwargs):
-        resume = self.__call__(request.session, Resume, 'res')
-        vacancy = self.__call__(request.session, Vacancy, 'vac')
-
-        return render(request, self.template_name,
-                      {'res': resume, 'vac': vacancy, 'left_menu': 'favs'})
-
+    def get_context_data(self, **kwargs):
+        context = super(FavoritesList, self).get_context_data(**kwargs)
+        context.update(
+            {'res': [get_object_or_404(Resume, pk=item['id']) for item
+                     in filter(lambda x: x['type'] == 'res',
+                               self.request.session.get('favorites'))],
+             'vac': [get_object_or_404(Resume, pk=item['id']) for item
+                     in filter(lambda x: x['type'] == 'vac',
+                               self.request.session.get('favorites'))],
+             'left_menu': 'favs'
+             })
+        return context
 
 # @login_required()
 # def favorites_list(request):

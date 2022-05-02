@@ -13,44 +13,72 @@ from .forms import (CompanyCardEditForm, ExperienceAddForm, ExperienceFormSet,
 from .models import (CompanyCard, Experience, FeedbackAndSuggestion, Message,
                      Profile, Resume, Vacancy)
 
-
-def user_login(request):
-    if request.method == 'POST':
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            cd = form.cleaned_data
-            user = authenticate(request,
-                                username=cd['username'],
-                                password=cd['password'])
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                vacancies = Vacancy.objects.all().filter(status='published')
-                resumes = Resume.objects.all().filter(status='published')
-                return render(request, 'portal/account/dashboard.html',
-                              {'section': 'dashboard', 'vacancies': vacancies,
-                               'resumes': resumes})
-            else:
-                return HttpResponse("Disable Acc")
-        else:
-            return HttpResponse("Invalid login")
-    else:
-        form = LoginForm()
-    return render(request, 'portal/account/login.html', {'form': form})
+from django.contrib.auth.mixins import LoginRequiredMixin, \
+    PermissionRequiredMixin
+from django.contrib.auth.views import LoginView, LogoutView
+from django.views.generic import TemplateView
 
 
-def user_logout(request):
-    logout(request)
-    return render(request, 'portal/account/logout.html')
+class UserLogin(LoginView):
+    template_name = 'portal/account/login.html'
+    success_url = 'portal/account/dashboard.html'
+    extra_context = {'section': 'dashboard',
+                     'vacancies': Vacancy.objects.all().filter(
+                         status='published'),
+                     'resumes': Resume.objects.all().filter(status='published')
+                     }
 
 
-@login_required()
-def dashboard(request):
-    vacancies = Vacancy.objects.all().filter(status='published')
-    resumes = Resume.objects.all().filter(status='published')
-    return render(request, 'portal/account/dashboard.html',
-                  {'section': 'dashboard', 'vacancies': vacancies,
-                   'resumes': resumes})
+# def user_login(request):
+#     if request.method == 'POST':
+#         form = LoginForm(request.POST)
+#         if form.is_valid():
+#             cd = form.cleaned_data
+#             user = authenticate(request,
+#                                 username=cd['username'],
+#                                 password=cd['password'])
+#         if user is not None:
+#             if user.is_active:
+#                 login(request, user)
+#                 vacancies = Vacancy.objects.all().filter(status='published')
+#                 resumes = Resume.objects.all().filter(status='published')
+#                 return render(request, 'portal/account/dashboard.html',
+#                               {'section': 'dashboard', 'vacancies': vacancies,
+#                                'resumes': resumes})
+#             else:
+#                 return HttpResponse("Disable Acc")
+#         else:
+#             return HttpResponse("Invalid login")
+#     else:
+#         form = LoginForm()
+#     return render(request, 'portal/account/login.html', {'form': form})
+
+
+class UserLogout(LogoutView):
+    template_name = 'portal/account/logout.html'
+
+
+# def user_logout(request):
+#     logout(request)
+#     return render(request, 'portal/account/logout.html')
+
+
+class Dashboard(LoginRequiredMixin, TemplateView):
+    template_name = 'portal/account/dashboard.html'
+    extra_context = {'section': 'dashboard',
+                     'vacancies': Vacancy.objects.all().filter(
+                         status='published'),
+                     'resumes': Resume.objects.all().filter(status='published')
+                     }
+
+
+# @login_required()
+# def dashboard(request):
+#     vacancies = Vacancy.objects.all().filter(status='published')
+#     resumes = Resume.objects.all().filter(status='published')
+#     return render(request, 'portal/account/dashboard.html',
+#                   {'section': 'dashboard', 'vacancies': vacancies,
+#                    'resumes': resumes})
 
 
 def register(request):
@@ -78,19 +106,32 @@ def register(request):
                       {'user_form': user_form})
 
 
-@login_required()
-def private(request):
-    try:
-        company_card = get_object_or_404(CompanyCard, user=request.user)
-    except Exception:
-        company_card = None
-    try:
-        profile = get_object_or_404(Profile, user=request.user)
-    except Exception:
-        profile = None
-    return render(request, 'portal/account/private.html', {'section': 'private',
-                                                           'company_card': company_card,
-                                                           'profile': profile})
+class Private(LoginRequiredMixin, TemplateView):
+    template_name = 'portal/account/private.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(Private, self).get_context_data(**kwargs)
+        context.update({'section': 'private',
+                        'company_card': get_object_or_404(CompanyCard, user=self.request.user),
+                        'profile': get_object_or_404(Profile, user=self.request.user)
+                        })
+        return context
+
+
+# @login_required()
+# def private(request):
+#     try:
+#         company_card = get_object_or_404(CompanyCard, user=request.user)
+#     except Exception:
+#         company_card = None
+#     try:
+#         profile = get_object_or_404(Profile, user=request.user)
+#     except Exception:
+#         profile = None
+#     return render(request, 'portal/account/private.html',
+#                   {'section': 'private',
+#                    'company_card': company_card,
+#                    'profile': profile})
 
 
 @login_required
@@ -119,9 +160,10 @@ def edit_profile(request):
 def edit_company_card(request):
     if request.method == 'POST':
         user_form = UserEditForm(instance=request.user, data=request.POST)
-        company_card_form = CompanyCardEditForm(instance=request.user.companycard,
-                                                data=request.POST,
-                                                files=request.FILES)
+        company_card_form = CompanyCardEditForm(
+            instance=request.user.companycard,
+            data=request.POST,
+            files=request.FILES)
         if user_form.is_valid() and company_card_form.is_valid():
             user_form.save()
             company_card_form.save()
@@ -130,28 +172,44 @@ def edit_company_card(request):
             messages.error(request, 'Ошибка при изменении карточки компании.')
     else:
         user_form = UserEditForm(instance=request.user)
-        company_card_form = CompanyCardEditForm(instance=request.user.companycard)
+        company_card_form = CompanyCardEditForm(
+            instance=request.user.companycard)
     return render(request, 'portal/account/edit_company_card.html',
-                  {'user_form': user_form, 'company_card_form': company_card_form})
+                  {'user_form': user_form,
+                   'company_card_form': company_card_form})
 
 
-@login_required
-@permission_required('portal.add_vacancy')
-def my_vacancies(request):
-    vacs = Vacancy.objects.filter(company=request.user.companycard)
-    return render(request, 'portal/account/my_vacancies.html',
-                  {'vacs': vacs, 'left_menu': 'my_vacs'})
+class MyVacancies(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
+    template_name = 'portal/account/my_vacancies.html'
+    permission_required = 'portal.add_vacancy'
+
+    def get_context_data(self, **kwargs):
+        context = super(MyVacancies, self).get_context_data(**kwargs)
+        context.update(
+            {'vacs': Vacancy.objects.filter(
+                company=self.request.user.companycard),
+             'left_menu': 'my_vacs'})
+        return context
+
+
+# @login_required
+# @permission_required('portal.add_vacancy')
+# def my_vacancies(request):
+#     vacs = Vacancy.objects.filter(company=request.user.companycard)
+#     return render(request, 'portal/account/my_vacancies.html',
+#                   {'vacs': vacs, 'left_menu': 'my_vacs'})
 
 
 @login_required
 def vacancy_detail(request, vacancy_id):
     vacancy = get_object_or_404(Vacancy, pk=vacancy_id)
-    resumes = Resume.objects.filter(user=request.user).\
+    resumes = Resume.objects.filter(user=request.user). \
         filter(status='published')
     vac_feed = FeedbackAndSuggestion.objects.filter(vacancy=vacancy)
     resumes = resumes.exclude(feedbacks__in=vac_feed)
     if request.method == 'POST':
-        resume = get_object_or_404(Resume, pk=request.POST.get('active_resume'))
+        resume = get_object_or_404(Resume,
+                                   pk=request.POST.get('active_resume'))
         FeedbackAndSuggestion.objects.create(vacancy=vacancy, resume=resume)
         messages.success(request, 'Отклик отправлен успешно.')
         return redirect('portal:vacancy_detail', vacancy_id=vacancy_id)
@@ -186,7 +244,8 @@ def add_vacancy(request):
 @login_required
 @permission_required('portal.change_vacancy')
 def edit_vacancy(request, vacancy_id):
-    edit_vac = get_object_or_404(Vacancy, pk=vacancy_id, company__user=request.user)
+    edit_vac = get_object_or_404(Vacancy, pk=vacancy_id,
+                                 company__user=request.user)
     comment = edit_vac.comment
     if request.method == 'POST':
         vacancy_form = VacancyAddForm(instance=edit_vac, data=request.POST)
@@ -209,7 +268,8 @@ def edit_vacancy(request, vacancy_id):
 @login_required
 @permission_required('portal.delete_vacancy')
 def delete_vacancy(request, vacancy_id):
-    del_vac = get_object_or_404(Vacancy, pk=vacancy_id, company__user=request.user)
+    del_vac = get_object_or_404(Vacancy, pk=vacancy_id,
+                                company__user=request.user)
     if request.method == 'POST':
         del_vac.delete()
         messages.success(request, 'Вакансия удалена успешно.')
@@ -359,9 +419,11 @@ def find_resume(request):
     query = request.GET.get('q')
     resume = Resume.objects.filter(status='published')
     if not query:
-        return render(request, 'portal/account/find_resume.html', {'resume': resume})
+        return render(request, 'portal/account/find_resume.html',
+                      {'resume': resume})
     resume = resume.filter(title__icontains=query)
-    return render(request, 'portal/account/find_resume.html', {'resume': resume})
+    return render(request, 'portal/account/find_resume.html',
+                  {'resume': resume})
 
 
 @login_required()
@@ -377,7 +439,8 @@ def find_job(request):
 @login_required()
 def feedback_list(request):
     if request.user.has_perm('portal.add_resume'):
-        feedbacks = FeedbackAndSuggestion.objects.filter(resume__user=request.user)
+        feedbacks = FeedbackAndSuggestion.objects.filter(
+            resume__user=request.user)
     else:
         feedbacks = FeedbackAndSuggestion.objects.filter(
             vacancy__company__user=request.user)
@@ -390,7 +453,7 @@ def feedback_detail(request, feedback_id):
     feed = get_object_or_404(FeedbackAndSuggestion, pk=feedback_id)
     feed_messages = feed.messages.all().order_by('-created')
     if request.method == 'POST':
-        mes_text = request.POST.get('message_copy').strip() if\
+        mes_text = request.POST.get('message_copy').strip() if \
             request.POST.get('message_copy') else None
         if 'invite' in request.POST:
             if mes_text:
