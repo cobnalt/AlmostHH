@@ -13,4 +13,5 @@ urlpatterns = [
     # path('news/<slug:news>/', views.news_detail, name='news_detail'),
     path(r'rules/', RulesView.as_view(), name='rules'),
     # path('rules/', views.rules, name='rules'),
+    path(r'contact/', views.contact, name='contact'),
 ]

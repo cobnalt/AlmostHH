@@ -11,7 +11,7 @@ class NewsList(ListView):
     model = News
     template_name = 'news/news/list.html'
     context_object_name = 'news'
-    paginate_by = 5
+    paginate_by = 3
 
 
 # def news_list(request):
@@ -27,6 +27,15 @@ class NewsList(ListView):
 #         # Если номер страницы больше, чем общее количество страниц, возвращаем последнюю.
 #         news = paginator.page(paginator.num_pages)
 #     return render(request, 'news/news/list.html', {'page': page, 'news': news})
+
+
+def index(request):
+    return render(request, 'news/index.html')
+
+
+def contact(request):
+    return render(request, 'news/contact.html')
+
 
 class NewsDetail(DetailView):
     model = News

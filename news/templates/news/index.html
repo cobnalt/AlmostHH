@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Правила</title>
+    <title>Главная</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -39,32 +39,18 @@
     <!-- header-end -->
 
     <!-- slider_area_start -->
-    {% include 'news/rules_slider_area.html' %}
+    {% include 'news/index_slider_area.html' %}
     <!-- slider_area_end -->
 
-  <section class="sample-text-area">
-		<div class="container box_1170">
-			<h3 class="text-heading">Добро пожаловать на портал AlmostHH</h3>
-			<p class="sample-text">
-				Обращаем ваше внимание, что мы особенно ценим вежливость, ведь это способ показать уважение не только к окружающим, но и к себе самому.
+    <!-- catagory_area -->
+     <div class="popular_catagory_area">
+        <div class="container">
+            {% include 'portal/account/includes/messages.html' %}
+            {% block content %} {% endblock %}
+        </div>
+    </div>
 
-                Во избежание недоразумений просим вас ознакомиться с небольшим сводом правил
-            </p>
-            <h3 class="text-heading">Запрещается</h3>
-            <p class="sample-text">
-                Писать оскорбления и угрозы в адрес посетителей и администрации сайта, переходить на личности, открыто хамить и унижать человеческое достоинство.
-
-                Размещать сообщения, содержащие призывы к разжиганию любых видов розни, совершению противоправных действий и всего, что подлежит преследованию законодательством Российской Федерации.
-
-                Использовать ненормативную лексику, а также грубые слова и выражения (помеченные в словаре как «бранн.», «пренебр.», «грубо»); за подобное поведение пользователь может быть заблокирован в данном сообществе без объяснения причин.
-
-                Размещать спам, а также рекламу товаров и услуг, других ресурсов, саморекламу (например: «заходите к нам на сайт, у нас есть то, что решит вашу проблему» или «в моей книге про это всё написано»), ссылки и гиперссылки.
-
-                Размещать рекламу, в любой форме, сервисов или услуг, аналогичных тем, что предоставляет портал.
-			</p>
-		</div>
-	</section>
-	<!-- End Sample Area -->
+    <!--/ catagory_area -->
 
     <!-- footer start -->
     {% include 'news/footer.html' %}
