@@ -1,54 +1,35 @@
-{% extends "news/base.html" %}
-{% block title %} Подбор работы {% endblock %}
+{% extends "news/index.html" %}
+{% load static %}
 {% block content %}
 <div class="container">
-    <h1 class="text-center">Новости</h1>
-    {% for s_news in news %}
     <div class="row">
-        <div class="col">
-            <div class="single_news">
-                <h2>
-                    <a href="{{ s_news.get_absolute_url }}">{{ s_news.title }}</a>
-                </h2>
-                <p class="date"><small class="text-muted">{{ s_news.publish }}</small></p>
-                <p class="content">{{ s_news.body|truncatewords:30|linebreaks }}</p>
+        <div class="col-lg-12">
+            <div class="section_title mb-40">
+                <h3>Новости</h3>
             </div>
         </div>
     </div>
+    {% for s_news in news %}
+    <article class="blog_item">
+        <div class="blog_item_img">
+            <img class="card-img rounded-0" src="{% static 'news/new/img/blog/single_blog_1.png' %}" alt="">
+            <a href="#" class="blog_item_date">
+                <h3 style="text-align:  center;">{{ s_news.publish.day }}</h3>
+                <p style="text-align:  center;">Марта</p>
+            </a>
+        </div>
+        <div class="blog_details">
+            <a class="d-inline-block" href="{{ s_news.get_absolute_url }}">
+                <h2>{{ s_news.title }}</h2>
+            </a>
+            <p>{{ s_news.body|truncatewords:30|linebreaks }}</p>
+            <ul class="blog-info-link">
+                <li><a href="#"><i class="fa fa-user"></i> Travel, Lifestyle</a></li>
+                <li><a href="#"><i class="fa fa-comments"></i> 03 Comments</a></li>
+            </ul>
+        </div>
+    </article>
     {% endfor %}
     {% include "news/pagination.html" with page=news %}
-    <h1 class="text-center">Компании - партнеры</h1>
-    <div class="row mb-4">
-        <div class="col-4">
-            <div class="partner_card">
-                Albatross Internet Group
-            </div>
-        </div>
-        <div class="col-4">
-            <div class="partner_card">
-                ALFA system
-            </div>
-        </div>
-        <div class="col-4">
-            <div class="partner_card">
-                1C:Франчайзи Инжиниринг
-            </div>
-        </div>
-        <div class="col-4">
-            <div class="partner_card">
-                Cetera
-            </div>
-        </div>
-        <div class="col-4">
-            <div class="partner_card">
-                EYECONWEB
-            </div>
-        </div>
-        <div class="col-4">
-            <div class="partner_card">
-                Medesk
-            </div>
-        </div>
-    </div>
 </div>
 {% endblock %}

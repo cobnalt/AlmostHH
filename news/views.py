@@ -6,7 +6,7 @@ from .models import News
 
 def news_list(request):
     object_list = News.objects.all()
-    paginator = Paginator(object_list, 5)  # По 5 на каждой странице.
+    paginator = Paginator(object_list, 3)  # По 5 на каждой странице.
     page = request.GET.get('page')
     try:
         news = paginator.page(page)
@@ -26,3 +26,13 @@ def news_detail(request, news):
 
 def rules(request):
     return render(request, 'news/news/rules.html')
+
+
+def index(request):
+    return render(request, 'news/index.html')
+
+
+def contact(request):
+    return render(request, 'news/contact.html')
+
+
