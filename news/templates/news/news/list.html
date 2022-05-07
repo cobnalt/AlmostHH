@@ -15,7 +15,7 @@
             <img class="card-img rounded-0" src="{% static 'news/new/img/blog/single_blog_1.png' %}" alt="">
             <a href="#" class="blog_item_date">
                 <h3 style="text-align:  center;">{{ s_news.publish.day }}</h3>
-                <p style="text-align:  center;">Марта</p>
+                <p style="text-align:  center;">{{ s_news.publish|date:'E'}}</p>
             </a>
         </div>
         <div class="blog_details">
