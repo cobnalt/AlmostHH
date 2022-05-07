@@ -12,17 +12,19 @@ class FavoritesList(LoginRequiredMixin, TemplateView):
     template_name = 'favorite/favorites_list.html'
 
     def get_context_data(self, **kwargs):
+        session = self.request.session.get('favorites')
+        session = [] if not session else session
+
         context = super(FavoritesList, self).get_context_data(**kwargs)
         context.update(
             {'res': [get_object_or_404(Resume, pk=item['id']) for item
-                     in filter(lambda x: x['type'] == 'res',
-                               self.request.session.get('favorites'))],
+                     in filter(lambda x: x['type'] == 'res', session)],
              'vac': [get_object_or_404(Resume, pk=item['id']) for item
-                     in filter(lambda x: x['type'] == 'vac',
-                               self.request.session.get('favorites'))],
+                     in filter(lambda x: x['type'] == 'vac', session)],
              'left_menu': 'favs'
              })
         return context
+
 
 # @login_required()
 # def favorites_list(request):

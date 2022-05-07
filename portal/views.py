@@ -15,8 +15,10 @@ from .models import (CompanyCard, Experience, FeedbackAndSuggestion, Message,
 
 from django.contrib.auth.mixins import LoginRequiredMixin, \
     PermissionRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.views import LoginView, LogoutView
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, DeleteView
+from django.urls import reverse_lazy
 
 
 class UserLogin(LoginView):
@@ -112,8 +114,10 @@ class Private(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(Private, self).get_context_data(**kwargs)
         context.update({'section': 'private',
-                        'company_card': get_object_or_404(CompanyCard, user=self.request.user),
-                        'profile': get_object_or_404(Profile, user=self.request.user)
+                        'company_card': get_object_or_404(CompanyCard,
+                                                          user=self.request.user),
+                        'profile': get_object_or_404(Profile,
+                                                     user=self.request.user)
                         })
         return context
 
@@ -185,10 +189,10 @@ class MyVacancies(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(MyVacancies, self).get_context_data(**kwargs)
-        context.update(
-            {'vacs': Vacancy.objects.filter(
-                company=self.request.user.companycard),
-             'left_menu': 'my_vacs'})
+        context.update({'vacs': Vacancy.objects.filter(
+            company=self.request.user.companycard),
+                        'left_menu': 'my_vacs'}
+                       )
         return context
 
 
@@ -265,26 +269,49 @@ def edit_vacancy(request, vacancy_id):
                   {'vacancy_form': vacancy_form, 'comment': comment})
 
 
-@login_required
-@permission_required('portal.delete_vacancy')
-def delete_vacancy(request, vacancy_id):
-    del_vac = get_object_or_404(Vacancy, pk=vacancy_id,
-                                company__user=request.user)
-    if request.method == 'POST':
-        del_vac.delete()
-        messages.success(request, 'Вакансия удалена успешно.')
-        return redirect('portal:my_vacancies')
-    else:
-        context = {'del_vac': del_vac}
-    return render(request, 'portal/account/delete_vacancy.html', context)
+class DeleteVacancy(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    template_name = 'portal/account/delete_vacancy.html'
+    permission_required = 'portal.delete_vacancy'
+    model = Vacancy
+    pk_url_kwarg = 'vacancy_id'
+    # TODO company__user ?!
+    success_url = reverse_lazy('portal:my_vacancies')
+    success_message = 'Вакансия удалена успешно.'
 
 
-@login_required
-@permission_required('portal.add_resume')
-def my_resumes(request):
-    resumes = Resume.objects.filter(user=request.user)
-    return render(request, 'portal/account/my_resumes.html',
-                  {'resumes': resumes, 'left_menu': 'my_resumes'})
+# @login_required
+# @permission_required('portal.delete_vacancy')
+# def delete_vacancy(request, vacancy_id):
+#     del_vac = get_object_or_404(Vacancy, pk=vacancy_id,
+#                                 company__user=request.user)
+#     if request.method == 'POST':
+#         del_vac.delete()
+#         messages.success(request, 'Вакансия удалена успешно.')
+#         return redirect('portal:my_vacancies')
+#     else:
+#         context = {'del_vac': del_vac}
+#     return render(request, 'portal/account/delete_vacancy.html', context)
+
+
+class MyResumes(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
+    template_name = 'portal/account/my_resumes.html'
+    permission_required = 'portal.add_resume'
+
+    def get_context_data(self, **kwargs):
+        context = super(MyResumes, self).get_context_data(**kwargs)
+        context.update(
+            {'resumes': Resume.objects.filter(user=self.request.user),
+             'left_menu': 'my_resumes'}
+            )
+        return context
+
+
+# @login_required
+# @permission_required('portal.add_resume')
+# def my_resumes(request):
+#     resumes = Resume.objects.filter(user=request.user)
+#     return render(request, 'portal/account/my_resumes.html',
+#                   {'resumes': resumes, 'left_menu': 'my_resumes'})
 
 
 @login_required
@@ -370,17 +397,26 @@ def edit_resume(request, resume_id):
                    'comment': comment, 'exp_formset': exp_formset})
 
 
-@login_required
-@permission_required('portal.delete_resume')
-def delete_resume(request, resume_id):
-    del_resume = get_object_or_404(Resume, pk=resume_id)
-    if request.method == 'POST':
-        del_resume.delete()
-        messages.success(request, 'Резюме удалено успешно.')
-        return redirect('portal:my_resumes')
-    else:
-        context = {'del_resume': del_resume}
-    return render(request, 'portal/account/delete_resume.html', context)
+class DeleteResume(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    template_name = 'portal/account/delete_resume.html'
+    permission_required = 'portal.delete_resume'
+    model = Resume
+    pk_url_kwarg = 'resume_id'
+    success_url = reverse_lazy('portal:my_resumes')
+    success_message = 'Резюме удалено успешно.'
+
+
+# @login_required
+# @permission_required('portal.delete_resume')
+# def delete_resume(request, resume_id):
+#     del_resume = get_object_or_404(Resume, pk=resume_id)
+#     if request.method == 'POST':
+#         del_resume.delete()
+#         messages.success(request, 'Резюме удалено успешно.')
+#         return redirect('portal:my_resumes')
+#     else:
+#         context = {'del_resume': del_resume}
+#     return render(request, 'portal/account/delete_resume.html', context)
 
 
 @login_required

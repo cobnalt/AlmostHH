@@ -24,13 +24,17 @@ urlpatterns = [
     path('vacancy/<int:vacancy_id>/', views.vacancy_detail, name='vacancy_detail'),
     path('add_vacancy/', views.add_vacancy, name='add_vacancy'),
     path('edit_vacancy/<int:vacancy_id>/', views.edit_vacancy, name='edit_vacancy'),
-    path('delete_vacancy/<int:vacancy_id>/', views.delete_vacancy, name='delete_vacancy'),
+    # path('delete_vacancy/<int:vacancy_id>/', views.delete_vacancy, name='delete_vacancy'),
+    path('delete_vacancy/<int:vacancy_id>/', views.DeleteVacancy.as_view(), name='delete_vacancy'),
 
-    path('my_resumes/', views.my_resumes, name='my_resumes'),
+    # path('my_resumes/', views.my_resumes, name='my_resumes'),
+    path(r'my_resumes/', views.MyResumes.as_view(), name='my_resumes'),
     path('resume/<int:resume_id>/', views.resume_detail, name='resume_detail'),
     path('add_resume/', views.add_resume, name='add_resume'),
     path('edit_resume/<int:resume_id>/', views.edit_resume, name='edit_resume'),
-    path('delete_resume/<int:resume_id>/', views.delete_resume, name='delete_resume'),
+    # path('delete_resume/<int:resume_id>/', views.delete_resume, name='delete_resume'),
+    path('delete_resume/<int:resume_id>/', views.DeleteResume.as_view(), name='delete_resume'),
+
 
     path('add_experience/', views.add_experience, name='add_experience'),
     path('edit_experience/<int:exp_id>/', views.edit_experience,
