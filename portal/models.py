@@ -98,7 +98,7 @@ class Experience(models.Model):
     start = models.DateField(verbose_name='Начало работы')
     finish = models.DateField(verbose_name='Окончание работы',
                               default=timezone.now)
-    until_now = models.BooleanField(verbose_name='До настоящего времени',
+    untilnow = models.BooleanField(verbose_name='До настоящего времени',
                                     default=True)
     organisation_name = models.CharField(max_length=100,
                                          verbose_name='Наименование организации')
