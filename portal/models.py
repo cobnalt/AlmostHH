@@ -3,6 +3,11 @@ from django.db import models
 from django.utils import timezone
 
 
+class PublishedManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(status='published')
+
+
 class CompanyCard(models.Model):
     STATUS_CHOICES = (
         ('draft', 'Черновик'),
@@ -57,6 +62,8 @@ class Vacancy(models.Model):
     resumes = models.ManyToManyField('Resume', through='FeedbackAndSuggestion',
                                      through_fields=('vacancy', 'resume'),
                                      related_name='vacancies')
+    objects = models.Manager()
+    published = PublishedManager()
 
     def __str__(self):
         return self.title
@@ -89,6 +96,8 @@ class Resume(models.Model):
     status = models.CharField(max_length=15, choices=STATUS_CHOICES,
                               default='draft',
                               verbose_name='Статус')
+    objects = models.Manager()
+    published = PublishedManager()
 
     def __str__(self):
         return self.title
@@ -99,7 +108,7 @@ class Experience(models.Model):
     finish = models.DateField(verbose_name='Окончание работы',
                               default=timezone.now)
     untilnow = models.BooleanField(verbose_name='До настоящего времени',
-                                    default=True)
+                                   default=True)
     organisation_name = models.CharField(max_length=100,
                                          verbose_name='Наименование организации')
     position = models.CharField(max_length=100, verbose_name='Должность')

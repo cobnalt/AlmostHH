@@ -29,12 +29,20 @@ class NewsList(ListView):
 #     return render(request, 'news/news/list.html', {'page': page, 'news': news})
 
 
-def index(request):
-    return render(request, 'news/index.html')
+class IndexView(TemplateView):
+    template_name = 'news/index.html'
 
 
-def contact(request):
-    return render(request, 'news/contact.html')
+# def index(request):
+#     return render(request, 'news/index.html')
+
+
+class ContactView(TemplateView):
+    template_name = 'news/contact.html'
+
+
+# def contact(request):
+#     return render(request, 'news/contact.html')
 
 
 class NewsDetail(DetailView):
@@ -50,7 +58,7 @@ class NewsDetail(DetailView):
 
 
 class RulesView(TemplateView):
-     template_name = 'news/news/rules.html'
+    template_name = 'news/news/rules.html'
 
 
 # def rules(request):

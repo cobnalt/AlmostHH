@@ -1,7 +1,7 @@
 from django.urls import path
 
 from . import views
-from news.views import NewsList, NewsDetail, RulesView
+from news.views import NewsList, NewsDetail, RulesView, ContactView
 
 app_name = 'news'
 
@@ -13,5 +13,6 @@ urlpatterns = [
     # path('news/<slug:news>/', views.news_detail, name='news_detail'),
     path(r'rules/', RulesView.as_view(), name='rules'),
     # path('rules/', views.rules, name='rules'),
-    path(r'contact/', views.contact, name='contact'),
+    path(r'contact/', ContactView.as_view(), name='contact'),
+    # path(r'contact/', views.contact, name='contact'),
 ]

@@ -25,9 +25,8 @@ class UserLogin(LoginView):
     template_name = 'portal/account/login.html'
     success_url = 'portal/account/dashboard.html'
     extra_context = {'section': 'dashboard',
-                     'vacancies': Vacancy.objects.all().filter(
-                         status='published'),
-                     'resumes': Resume.objects.all().filter(status='published')
+                     'vacancies': Vacancy.published.all(),
+                     'resumes': Resume.published.all(),
                      }
 
 
@@ -68,9 +67,8 @@ class UserLogout(LogoutView):
 class Dashboard(LoginRequiredMixin, TemplateView):
     template_name = 'portal/account/dashboard.html'
     extra_context = {'section': 'dashboard',
-                     'vacancies': Vacancy.objects.all().filter(
-                         status='published'),
-                     'resumes': Resume.objects.all().filter(status='published')
+                     'vacancies': Vacancy.published.all(),
+                     'resumes': Resume.published.all()
                      }
 
 
@@ -113,11 +111,12 @@ class Private(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(Private, self).get_context_data(**kwargs)
+
         context.update({'section': 'private',
-                        'company_card': get_object_or_404(CompanyCard,
-                                                          user=self.request.user),
-                        'profile': get_object_or_404(Profile,
-                                                     user=self.request.user)
+                        'company_card': CompanyCard.objects.filter(
+                            user=self.request.user),
+                        'profile': Profile.objects.filter(
+                            user=self.request.user),
                         })
         return context
 
@@ -207,8 +206,7 @@ class MyVacancies(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
 @login_required
 def vacancy_detail(request, vacancy_id):
     vacancy = get_object_or_404(Vacancy, pk=vacancy_id)
-    resumes = Resume.objects.filter(user=request.user). \
-        filter(status='published')
+    resumes = Resume.published.filter(user=request.user)
     vac_feed = FeedbackAndSuggestion.objects.filter(vacancy=vacancy)
     resumes = resumes.exclude(feedbacks__in=vac_feed)
     if request.method == 'POST':
@@ -317,8 +315,7 @@ class MyResumes(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
 @login_required
 def resume_detail(request, resume_id):
     resume = get_object_or_404(Resume, pk=resume_id)
-    vacancies = Vacancy.objects.filter(company__user=request.user). \
-        filter(status='published')
+    vacancies = Vacancy.published.filter(company__user=request.user)
     res_feed = FeedbackAndSuggestion.objects.filter(resume=resume)
     vacancies = vacancies.exclude(suggestions__in=res_feed)
     if request.method == 'POST':
@@ -453,7 +450,7 @@ def delete_experience(request, experience_id):
 @login_required()
 def find_resume(request):
     query = request.GET.get('q')
-    resume = Resume.objects.filter(status='published')
+    resume = Resume.published.all()
     if not query:
         return render(request, 'portal/account/find_resume.html',
                       {'resume': resume})
@@ -465,7 +462,7 @@ def find_resume(request):
 @login_required()
 def find_job(request):
     query = request.GET.get('q')
-    job = Vacancy.objects.filter(status='published')
+    job = Vacancy.published.all()
     if not query:
         return render(request, 'portal/account/find_job.html', {'job': job})
     job = job.filter(title__icontains=query)
