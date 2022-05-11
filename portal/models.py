@@ -46,7 +46,8 @@ class Vacancy(models.Model):
     )
     title = models.CharField(max_length=100, verbose_name='Наименование')
     slug = models.SlugField(max_length=100, verbose_name='Слаг')
-    salary = models.CharField(max_length=150, verbose_name='Зарплата')
+    # salary = models.CharField(max_length=150, verbose_name='Зарплата')
+    salary = models.PositiveIntegerField(default=0, verbose_name='Зарплата')
     company = models.ForeignKey(CompanyCard, on_delete=models.CASCADE,
                                 verbose_name='Компания',
                                 related_name='vacancies')
@@ -79,7 +80,8 @@ class Resume(models.Model):
     title = models.CharField(max_length=100,
                              verbose_name='Наименование вакансии')
     slug = models.SlugField(max_length=100, verbose_name='Слаг')
-    salary = models.CharField(max_length=150, verbose_name='Зарплата')
+    # salary = models.CharField(max_length=150, verbose_name='Зарплата')
+    salary = models.PositiveIntegerField(default=0, verbose_name='Зарплата')
     user = models.ForeignKey(User, on_delete=models.CASCADE,
                              verbose_name='Пользователь',
                              related_name='resumes')
