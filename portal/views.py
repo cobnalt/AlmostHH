@@ -114,9 +114,9 @@ class Private(LoginRequiredMixin, TemplateView):
 
         context.update({'section': 'private',
                         'company_card': CompanyCard.objects.filter(
-                            user=self.request.user),
+                            user=self.request.user).first(),
                         'profile': Profile.objects.filter(
-                            user=self.request.user),
+                            user=self.request.user).first(),
                         })
         return context
 

@@ -19,7 +19,7 @@ class FavoritesList(LoginRequiredMixin, TemplateView):
         context.update(
             {'res': [get_object_or_404(Resume, pk=item['id']) for item
                      in filter(lambda x: x['type'] == 'res', session)],
-             'vac': [get_object_or_404(Resume, pk=item['id']) for item
+             'vac': [get_object_or_404(Vacancy, pk=item['id']) for item
                      in filter(lambda x: x['type'] == 'vac', session)],
              'left_menu': 'favs'
              })
