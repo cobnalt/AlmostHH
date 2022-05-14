@@ -17,7 +17,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, \
     PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.views import LoginView, LogoutView
-from django.views.generic import TemplateView, DeleteView
+from django.views.generic import TemplateView, DeleteView, ListView
 from django.urls import reverse_lazy
 
 

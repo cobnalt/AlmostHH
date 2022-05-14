@@ -5978,7 +5978,7 @@ $.widget( "ui.autocomplete", {
 		clearTimeout( this.searching );
 		this.searching = this._delay( function() {
 
-			// Search if the value has changed, or if the user retypes the same value (see #7434)
+			// fulltext if the value has changed, or if the user retypes the same value (see #7434)
 			var equalValues = this.term === this._value(),
 				menuVisible = this.menu.element.is( ":visible" ),
 				modifierKey = event.altKey || event.ctrlKey || event.metaKey || event.shiftKey;

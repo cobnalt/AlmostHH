@@ -2,6 +2,9 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 
+from django.contrib.postgres.search import SearchVectorField
+from django.contrib.postgres.indexes import GinIndex
+
 
 class PublishedManager(models.Manager):
     def get_queryset(self):
@@ -63,11 +66,18 @@ class Vacancy(models.Model):
     resumes = models.ManyToManyField('Resume', through='FeedbackAndSuggestion',
                                      through_fields=('vacancy', 'resume'),
                                      related_name='vacancies')
+    search_vector = SearchVectorField(null=True)
     objects = models.Manager()
     published = PublishedManager()
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        indexes = [
+            GinIndex(fields=['search_vector']),
+        ]
+
 
 
 class Resume(models.Model):
@@ -176,3 +186,4 @@ class Message(models.Model):
 
     def __str__(self):
         return f'Message {self.id}'
+
