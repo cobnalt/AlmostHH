@@ -108,11 +108,17 @@ class Resume(models.Model):
     status = models.CharField(max_length=15, choices=STATUS_CHOICES,
                               default='draft',
                               verbose_name='Статус')
+    search_vector = SearchVectorField(null=True)
     objects = models.Manager()
     published = PublishedManager()
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        indexes = [
+            GinIndex(fields=['search_vector']),
+        ]
 
 
 class Experience(models.Model):
