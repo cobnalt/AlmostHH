@@ -50,9 +50,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'news.apps.NewsConfig',
     'favorite.apps.FavoriteConfig',
-    'fulltext.apps.FulltextConfig',
     'tinymce',
-    'django.contrib.postgres'
+    'django.contrib.postgres',
 ]
 
 MIDDLEWARE = [

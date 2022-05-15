@@ -9,7 +9,7 @@
                 <h2>
                     <a href="{% url 'portal:vacancy_detail' s_job.id %}">{{ s_job.title }}</a>
                 </h2>
-                <p class="content">{{ s_job.company}}</p>
+                <p class="content">{{ s_job.annotate_expression}}</p>
                 <p class="content">{{ s_job.address}}</p>
                 <p class="content"><small class="text-muted">{{ s_job.salary}}</small></p>
                 <p class="content">{{ s_job.description|truncatewords:30|linebreaks }}</p>

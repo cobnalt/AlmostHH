@@ -24,7 +24,6 @@ urlpatterns = [
     path('portal/', include('portal.urls', namespace='portal')),
     path('favorites/', include('favorite.urls', namespace='favorites')),
     path('tinymce/', include('tinymce.urls')),
-    path('fulltext/', include('fulltext.urls')),
 ]
 
 if settings.DEBUG:
