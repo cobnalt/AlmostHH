@@ -2,6 +2,14 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 
+from django.contrib.postgres.search import SearchVectorField
+from django.contrib.postgres.indexes import GinIndex
+
+
+class PublishedManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(status='published')
+
 
 class CompanyCard(models.Model):
     STATUS_CHOICES = (
@@ -41,7 +49,8 @@ class Vacancy(models.Model):
     )
     title = models.CharField(max_length=100, verbose_name='Наименование')
     slug = models.SlugField(max_length=100, verbose_name='Слаг')
-    salary = models.CharField(max_length=150, verbose_name='Зарплата')
+    # salary = models.CharField(max_length=150, verbose_name='Зарплата')
+    salary = models.PositiveIntegerField(default=0, verbose_name='Зарплата')
     company = models.ForeignKey(CompanyCard, on_delete=models.CASCADE,
                                 verbose_name='Компания',
                                 related_name='vacancies')
@@ -57,9 +66,18 @@ class Vacancy(models.Model):
     resumes = models.ManyToManyField('Resume', through='FeedbackAndSuggestion',
                                      through_fields=('vacancy', 'resume'),
                                      related_name='vacancies')
+    search_vector = SearchVectorField(null=True)
+    objects = models.Manager()
+    published = PublishedManager()
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        indexes = [
+            GinIndex(fields=['search_vector']),
+        ]
+
 
 
 class Resume(models.Model):
@@ -72,7 +90,8 @@ class Resume(models.Model):
     title = models.CharField(max_length=100,
                              verbose_name='Наименование вакансии')
     slug = models.SlugField(max_length=100, verbose_name='Слаг')
-    salary = models.CharField(max_length=150, verbose_name='Зарплата')
+    # salary = models.CharField(max_length=150, verbose_name='Зарплата')
+    salary = models.PositiveIntegerField(default=0, verbose_name='Зарплата')
     user = models.ForeignKey(User, on_delete=models.CASCADE,
                              verbose_name='Пользователь',
                              related_name='resumes')
@@ -89,17 +108,25 @@ class Resume(models.Model):
     status = models.CharField(max_length=15, choices=STATUS_CHOICES,
                               default='draft',
                               verbose_name='Статус')
+    search_vector = SearchVectorField(null=True)
+    objects = models.Manager()
+    published = PublishedManager()
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        indexes = [
+            GinIndex(fields=['search_vector']),
+        ]
 
 
 class Experience(models.Model):
     start = models.DateField(verbose_name='Начало работы')
     finish = models.DateField(verbose_name='Окончание работы',
                               default=timezone.now)
-    until_now = models.BooleanField(verbose_name='До настоящего времени',
-                                    default=True)
+    untilnow = models.BooleanField(verbose_name='До настоящего времени',
+                                   default=True)
     organisation_name = models.CharField(max_length=100,
                                          verbose_name='Наименование организации')
     position = models.CharField(max_length=100, verbose_name='Должность')
@@ -165,3 +192,4 @@ class Message(models.Model):
 
     def __str__(self):
         return f'Message {self.id}'
+

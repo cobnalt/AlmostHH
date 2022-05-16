@@ -51,7 +51,7 @@ class ResumeAdmin(admin.ModelAdmin):
 
 @admin.register(Experience)
 class ExperienceAdmin(admin.ModelAdmin):
-    list_display = ('start', 'finish', 'until_now', 'organisation_name', 'user')
+    list_display = ('start', 'finish', 'untilnow', 'organisation_name', 'user')
     list_filter = ('organisation_name', 'user')
     search_fields = ('organisation_name', 'user')
     ordering = ('organisation_name',)

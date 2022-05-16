@@ -17,7 +17,13 @@ def total_vacancies(user):
 @register.simple_tag
 def total_feeds(user):
     if user.has_perm('portal.add_resume'):
-        return FeedbackAndSuggestion.objects.filter(resume__user=user).count()
+        try:
+            return FeedbackAndSuggestion.objects.filter(resume__user=user).count()
+        except Exception:
+            return 0
     else:
-        return FeedbackAndSuggestion.objects.filter(
-            vacancy__company__user=user).count()
+        try:
+            return FeedbackAndSuggestion.objects.filter(
+                vacancy__company__user=user).count()
+        except Exception:
+            return 0

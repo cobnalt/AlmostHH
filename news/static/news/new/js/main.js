@@ -304,7 +304,7 @@ mailChimp();
 
 
 
-        // Search Toggle
+        // fulltext Toggle
         $("#search_input_box").hide();
         $("#search").on("click", function () {
             $("#search_input_box").slideToggle();
@@ -313,7 +313,7 @@ mailChimp();
         $("#close_search").on("click", function () {
             $('#search_input_box').slideUp(500);
         });
-        // Search Toggle
+        // fulltext Toggle
         $("#search_input_box").hide();
         $("#search_1").on("click", function () {
             $("#search_input_box").slideToggle();
@@ -335,4 +335,4 @@ mailChimp();
 
 
 
-})(jQuery);	
+})(jQuery);

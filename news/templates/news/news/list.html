@@ -22,7 +22,7 @@
             <a class="d-inline-block" href="{{ s_news.get_absolute_url }}">
                 <h2>{{ s_news.title }}</h2>
             </a>
-            <p>{{ s_news.body|truncatewords:30|linebreaks }}</p>
+            <p>{{ s_news.body|safe|truncatewords:30 }}</p>
             <ul class="blog-info-link">
                 <li><a href="#"><i class="fa fa-user"></i> Travel, Lifestyle</a></li>
                 <li><a href="#"><i class="fa fa-comments"></i> 03 Comments</a></li>
