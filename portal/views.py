@@ -471,7 +471,6 @@ class FindResume(LoginRequiredMixin, SearchResultsList):
     annotate_expression = Concat('user_id__username', Value(''))
 
 
-
 # @login_required()
 # def find_job(request):
 #     query = request.GET.get('q')
