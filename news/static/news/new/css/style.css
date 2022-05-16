@@ -7473,3 +7473,100 @@ h6 {
 }
 
 /*# sourceMappingURL=style.css.map */
+
+.visual_form input, .visual_form select, .visual_form textarea {
+    display: block;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.visual_form p {
+    margin-bottom: 0.5rem;
+}
+.visual_form .helptext {
+    display: block;
+    font-size: 12px;
+    color: #777;
+}
+.work_exp__item {
+    display:flex;
+}
+.work_exp__descr {
+    margin-left: 40px;
+}
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+.vac-item, .res-item {
+    margin: 10px 5px;
+    padding: 20px;
+    border: 0;
+    border-radius: 4px;
+    box-shadow: 0 2px 12px #edeff0;
+}
+.vac-item > p, .send_message > p {
+    margin-bottom: 0;
+}
+.item_salary, .item_title > a {
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+.item_title > a {
+    text-decoration: none;
+}
+
+.find_resume, .find_job {
+    margin-top: 20px;
+    padding: 20px;
+    border: 0;
+    border-radius: 4px;
+    box-shadow: 0 2px 12px #edeff0;
+}
+
+.search_block {
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+}
+.search_block .form-control {
+    width: 77%;
+    display: inline-block;
+}
+
+.add_to_favorites {
+    cursor: pointer;
+    display: inline-block;
+    padding: 0.35em 0.65em;
+    font-size: .75em;
+    font-weight: 700;
+    line-height: 1;
+    color: blue;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem;
+    border: 1px solid #e77;
+}
+.added {
+    color: red;
+}
+.feedback-item {
+    display: flex;
+    align-items: center;
+}
+.feedback-item .res-item, .feedback-item .vac-item {
+    flex-grow: 1;
+}
+.button-list {
+    display: flex;
+    justify-content: space-between;
+}

@@ -335,4 +335,4 @@ mailChimp();
 
 
 
-})(jQuery);	
+})(jQuery);
