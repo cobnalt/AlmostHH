@@ -21,30 +21,34 @@ class ModelsInstancesForTests(TestCase):
     @classmethod
     def setUpTestData(cls):
         User.objects.create_user(
+            id=1,
             username='SomeUsername',
             first_name='FirstName',
             last_name='LastName',
             email='example@mail.ru',
         )
         CompanyCard.objects.create(
+            id=1,
             title='Some Title',
             slug='some-title',
             description='Some description for card',
             user=User.objects.get(id=1),
         )
         Vacancy.objects.create(
+            id=1,
             title='Some Title',
             slug='some-title',
-            salary='Some salary',
+            salary=33333,
             company=CompanyCard.objects.get(id=1),
             description='Some description for card',
             address='Some address',
             comment='Some comment',
         )
         Resume.objects.create(
+            id=1,
             title='Some Title',
             slug='some-title',
-            salary='Some salary',
+            salary=33333,
             user=User.objects.get(id=1),
             employment='Some employment',
             schedule='Some schedule',
@@ -54,24 +58,28 @@ class ModelsInstancesForTests(TestCase):
             comment='Some comment',
         )
         Experience.objects.create(
+            id=1,
             start=datetime.now() - timedelta(344),
             finish=datetime.now() - timedelta(37),
-            until_now=False,
+            untilnow=False,
             organisation_name='Some name',
             position='junior assistant of junior assistant',
             function='assist',
             user=User.objects.get(id=1),
         )
         Profile.objects.create(
+            id=1,
             user=User.objects.get(id=1),
             contact='Some contact',
             living_city='Some living city',
         )
         FeedbackAndSuggestion.objects.create(
+            id=1,
             vacancy=Vacancy.objects.get(id=1),
             resume=Resume.objects.get(id=1),
         )
         Message.objects.create(
+            id=1,
             text='Some text',
             sender=User.objects.get(id=1),
             feedback=FeedbackAndSuggestion.objects.get(id=1),
@@ -166,10 +174,10 @@ class VacancyModelTest(ModelsInstancesForTests):
         field_label = vacancy._meta.get_field('salary').verbose_name
         self.assertEquals(field_label, 'Зарплата')
 
-    def test_salary_max_length(self):
+    def test_salary_default_value(self):
         vacancy = Vacancy.objects.get(id=1)
-        field_max_length = vacancy._meta.get_field('salary').max_length
-        self.assertEquals(field_max_length, 150)
+        field_default_value = vacancy._meta.get_field('salary').default
+        self.assertEquals(field_default_value, 0)
 
     def test_company_label(self):
         vacancy = Vacancy.objects.get(id=1)
@@ -238,10 +246,10 @@ class ResumeModelTest(ModelsInstancesForTests):
         field_label = resume._meta.get_field('salary').verbose_name
         self.assertEquals(field_label, 'Зарплата')
 
-    def test_salary_max_length(self):
+    def test_salary_default_value(self):
         resume = Resume.objects.get(id=1)
-        field_max_length = resume._meta.get_field('salary').max_length
-        self.assertEquals(field_max_length, 150)
+        field_default_value = resume._meta.get_field('salary').default
+        self.assertEquals(field_default_value, 0)
 
     def test_employment_label(self):
         resume = Resume.objects.get(id=1)
@@ -325,9 +333,9 @@ class ExperienceModelTest(ModelsInstancesForTests):
         field_label = exp._meta.get_field('finish').verbose_name
         self.assertEquals(field_label, 'Окончание работы')
 
-    def test_until_now_label(self):
+    def test_untilnow_label(self):
         exp = Experience.objects.get(id=1)
-        field_label = exp._meta.get_field('until_now').verbose_name
+        field_label = exp._meta.get_field('untilnow').verbose_name
         self.assertEquals(field_label, 'До настоящего времени')
 
     def test_organisation_name_label(self):

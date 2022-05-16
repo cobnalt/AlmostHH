@@ -138,7 +138,7 @@ class VacancyAddFormTest(TestCase):
         form = VacancyAddForm(
             data={
                 'title': 'Some title',
-                'salary': 'Some salary',
+                'salary': 3333333,
                 'description': 'Some description',
                 'address': 'Some address',
             },
@@ -259,7 +259,7 @@ class ProfileEditFormTest(TestCase):
 
     def test_form_date_of_birth_label(self):
         form_field_label = self.form.fields['date_of_birth'].label
-        self.assertIsNone(form_field_label)
+        self.assertEqual(form_field_label, 'Дата рождения')
 
     def test_form_date_of_birth_input_formats(self):
         form_field_input_formats = self.form.fields['date_of_birth'].input_formats
@@ -311,7 +311,7 @@ class ResumeAddFormTest(TestCase):
         form = ResumeAddForm(
             data={
                 'title': 'Some title',
-                'salary': 'Some salary',
+                'salary': 3333333,
                 'employment': 'Some employment',
                 'schedule': 'Some schedule',
                 'about_me': 'Something about_me',
