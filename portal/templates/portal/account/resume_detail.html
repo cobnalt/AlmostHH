@@ -1,78 +1,132 @@
 {% extends "news/base.html" %}
 {% block title %} {{ resume.title }} {% endblock %}
 {% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col-3">
-            <div class="left-menu">
 
-                    {% include 'portal/account/includes/dashboard_menu.html' %}
+{% if perms.portal.change_resume and resume.user == request.user %}
+{% if resume.comment %}
+<p class="alert alert-danger">{{ resume.comment }}</p>
+{% endif %}
+{% endif %}
 
+<div class="job_details_area" style="padding-top: 0px;">
+    <div class="container">
+        <div class="col-md-12">
+            <div class="submit_btn">
+                <button class="boxed-btn3">
+                    <a onclick="javascript:history.back(); return false;">Назад</a>
+                </button>
             </div>
         </div>
-        <div class="col-9">
-            {% if perms.portal.change_resume and resume.user == request.user %}
-            {% if resume.comment %}
-            <p class="alert alert-danger">{{ resume.comment }}</p>
-            {% endif %}
-            {% endif %}
-            <div class="resume_card mt-5 mb-5">
-                <div class="resume_card__data">
-                    <h1>{{ resume.user.last_name }} {{ resume.user.first_name }}</h1>
-                    <p>{{ resume.user.profile.get_sex_display }}, {{ resume.user.profile.date_of_birth }} года рождения</p>
-                    <p class="h5 text-muted">Контакты</p>
-                    <p>{{ resume.user.profile.contact }}</p>
-                    <p>{{ resume.user.profile.living_city }}</p>
+        <br>
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="job_details_header">
+                    <div class="single_jobs white-bg d-flex justify-content-between">
+                        <div class="jobs_left d-flex align-items-center">
+                            <div class="jobs_conetent">
+                                <h4>{{ resume.title }}</h4>
+                                <div class="links_locat d-flex align-items-center">
+                                    <div class="location">
+                                        <p> <i class="fa fa-calendar"></i>{{ resume.schedule }}</p>
+                                    </div>
+                                    <div class="location">
+                                        <p> <i class="fa fa-clock-o"></i>{{ resume.schedule }}</p>
+                                    </div>
+                                    <div class="location">
+                                        <p> <i class="fa fa-rub"></i>{{ resume.salary }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="jobs_right">
+                            <div class="apply_now">
+                                {% if perms.portal.change_vacancy %}
+                                {% include 'favorite/includes/add_to_favorites.html' with type='res' id=resume.id %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="resume_card__photo">
-                    <p>{{ resume.user.profile.photo }}</p>
+                <div class="descript_wrap white-bg">
+                    <div class="single_wrap">
+                        <h2 class="text-muted">Опыт работы</h2>
+                        <div class="experience">
+                            {% if resume.user.experiences %}
+                            {% for exp in resume.user.experiences.all %}
+                            <div class="work_exp__item">
+                                <div class="work_exp__date">
+                                    {{ exp.finish }} - {{ exp.start }}
+                                </div>
+                                <div class="work_exp__descr">
+                                    <p class="mb-3"><strong>{{ exp.organisation_name }}</strong></p>
+                                    <p><strong>{{ exp.position }}</strong></p>
+                                    <p>{{ exp.function }}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            {% endfor %}
+                            <p>Без опыта</p>
+                            {% endif %}
+                        </div>
+                        <h2 class="text-muted">Обо мне</h2>
+                        <p>{{ resume.about_me | linebreaks }}</p>
+                        <h2 class="text-muted">Высшее образование</h2>
+                        <p>{{ resume.education }}</p>
+                        <h2 class="text-muted">Знание языков</h2>
+                        <p>{{ resume.language }}</p>
+                        <h2 class="text-muted">Гражданство</h2>
+                        <p>{{ resume.citizenship }}</p>
+                    </div>
                 </div>
             </div>
-            <h2>{{ resume.title }}
+            <div class="col-lg-4">
+                <div class="job_sumary">
+                    <div class="summery_header">
+                        <h3>Резюме работы</h3>
+                    </div>
+                    <div class="job_content">
+                        <ul>
+                            <div class="resume_card__photo">
+                                <p>{{ resume.user.profile.photo }}</p>
+                            </div>
+                            <h1>{{ resume.user.last_name }} {{ resume.user.first_name }}</h1>
+                            <p>{{ resume.user.profile.get_sex_display }}, {{ resume.user.profile.date_of_birth }} года рождения</p>
+                            <p class="h5 text-muted">Контакты</p>
+                            <p>{{ resume.user.profile.contact }}</p>
+                            <p>{{ resume.user.profile.living_city }}</p>
+                        </ul>
+                    </div>
+                </div>
+                <div class="share_wrap d-flex">
+                    <span>Поделиться:</span>
+                    <ul>
+                        <li><a href="#"> <i class="fa fa-facebook"></i></a> </li>
+                        <li><a href="#"> <i class="fa fa-google-plus"></i></a> </li>
+                        <li><a href="#"> <i class="fa fa-twitter"></i></a> </li>
+                        <li><a href="#"> <i class="fa fa-envelope"></i></a> </li>
+                    </ul>
+                </div>
                 {% if perms.portal.change_resume and resume.user == request.user %}
-                <span class="h6"><a href="{% url 'portal:edit_resume' resume.id %}">редактировать</a></span>
-                {% endif %}
-            </h2>
-
-            {% if perms.portal.change_vacancy %}
-            {% include 'favorite/includes/add_to_favorites.html' with type='res' id=resume.id %}
-            {% endif %}
-
-            <p class="h4 text-muted">{{ resume.salary }}</p>
-            <p>Занятость: {{ resume.employment }}</p>
-            <p>График работы: {{ resume.schedule }}</p>
-            <h2 class="text-muted">Опыт работы</h2>
-            <div class="experience">
-                {% if resume.user.experiences %}
-                {% for exp in resume.user.experiences.all %}
-                <div class="work_exp__item">
-                    <div class="work_exp__date">
-                        {{ exp.finish }} - {{ exp.start }}
-                    </div>
-                    <div class="work_exp__descr">
-                        <p class="mb-3"><strong>{{ exp.organisation_name }}</strong></p>
-                        <p><strong>{{ exp.position }}</strong></p>
-                        <p>{{ exp.function }}</p>
+                <div class="col-md-12">
+                    <div class="submit_btn">
+                        <button class="boxed-btn3 w-100">
+                            <a href="{% url 'portal:edit_resume' resume.id %}">редактировать</a>
+                        </button>
                     </div>
                 </div>
-                <hr>
-                {% endfor %}
+
+                {% endif %}
+                {% if perms.portal.change_vacancy %}
+                <div class="col-md-12">
+                    <div class="submit_btn">
+                        <button class="boxed-btn3 w-100" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            Пригласить
+                        </button>
+                    </div>
+                </div>
+                {% include 'portal/account/includes/feedback_resume.html' with type='vacancy' items=vacancies %}
                 {% endif %}
             </div>
-            <h2 class="text-muted">Обо мне</h2>
-            <p>{{ resume.about_me | linebreaks }}</p>
-            <h2 class="text-muted">Высшее образование</h2>
-            <p>{{ resume.education }}</p>
-            <h2 class="text-muted">Знание языков</h2>
-            <p>{{ resume.language }}</p>
-            <h2 class="text-muted">Гражданство</h2>
-            <p>{{ resume.citizenship }}</p>
-            {% if perms.portal.change_vacancy %}
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                Пригласить
-            </button>
-            {% include 'portal/account/includes/feedback_resume.html' with type='vacancy' items=vacancies %}
-            {% endif %}
         </div>
     </div>
 </div>
