@@ -1,6 +1,7 @@
 {% extends "news/base.html" %}
 {% block title %} Рабочий стол {% endblock %}
 {% block content %}
+<div class="job_listing_area">
 <div class="container">
     <div class="row">
         <div class="col">
@@ -19,36 +20,91 @@
 
             </div>
         </div>
+
         <div class="col-9">
             <div class="row">
-                {% if perms.portal.add_resume %}
-                {% if vacancies %}
-                <div class="vacancies">
-                    {% for vac in vacancies %}
-                    <div class="vac-item">
-                        <p class="item_title"><a href="{% url 'portal:vacancy_detail' vac.id %}">{{ vac.title }}</a></p>
-                        <p class="item_salary">{{ vac.salary }}</p>
-                        <p class="item_comp_title">{{ vac.company.title }}</p>
-                        <p class="item_comp_title">{{ vac.address }}</p>
+<!-- job_listing_area_start  -->
+    {% if perms.portal.add_resume %}
+    {% if vacancies %}
+        {% for vac in vacancies %}
+            <div class="job_listing_area" style="width:100%">
+                <div class="container">
+                    <div class="row" style="width:100%">
+                        <div class="col-lg-9">
+                            <div class="job_lists m-0">
+                                <div class="row" style="width:100%">
+                                    <div class="col-lg-12 col-md-12">
+                                        <div class="single_jobs white-bg d-flex justify-content-between">
+                                            <div class="jobs_left d-flex align-items-center">
+                                                <div class="thumb">
+                                                    <img src="img/svg_icon/1.svg" alt="">
+                                                </div>
+                                                <div class="jobs_conetent">
+                                                    <a href="{% url 'portal:vacancy_detail' vac.id %}"><h4>{{ vac.title }}</h4></a>
+                                                    <div class="links_locat d-flex align-items-center">
+                                                        <div class="location">
+                                                            <p> <i class="fa fa-map-marker"></i>{{ vac.address }}</p>
+                                                        </div>
+                                                        <div class="location">
+                                                            <p> <i class="fa fa-user-o"></i>{{ vac.company.title }}</p>
+                                                        </div>
+                                                        <div class="location">
+                                                            <p> <i class="fa fa-rub"></i>{{ vac.salary }}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    {% endfor %}
                 </div>
-                {% endif %}
-                {% endif %}
-                {% if perms.portal.add_vacancy %}
-                {% if resumes %}
-                <div class="resumes">
-                    {% for res in resumes %}
-                    <div class="res-item">
-                        <p class="item_title"><a href="{% url 'portal:resume_detail' res.id %}">{{ res.title }}</a></p>
-                        <p class="item_salary">{{ res.salary }}</p>
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% endif %}
+    {% if perms.portal.add_vacancy %}
+    {% if resumes %}
+        {% for res in resumes %}
+            <div class="job_listing_area" style="width:100%">
+                <div class="container">
+                    <div class="row" style="width:100%">
+                        <div class="col-lg-9">
+                            <div class="job_lists m-0">
+                                <div class="row" style="width:100%">
+                                    <div class="col-lg-12 col-md-12">
+                                        <div class="single_jobs white-bg d-flex justify-content-between">
+                                            <div class="jobs_left d-flex align-items-center">
+                                                <div class="thumb">
+                                                    <img src="img/svg_icon/1.svg" alt="">
+                                                </div>
+                                                <div class="jobs_conetent">
+                                                    <a href="{% url 'portal:resume_detail' res.id %}"><h4>{{ res.title }}</h4></a>
+                                                    <div class="links_locat d-flex align-items-center">
+                                                        <div class="location">
+                                                            <p> <i class="fa fa-rub"></i>{{ res.salary }}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    {% endfor %}
                 </div>
-                {% endif %}
-                {% endif %}
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% endif %}
+<!-- job_listing_area_end  -->
+                </div>
             </div>
         </div>
     </div>
 </div>
+
 {% endblock %}
