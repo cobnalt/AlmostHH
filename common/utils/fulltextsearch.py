@@ -27,8 +27,7 @@ class SearchResultsList(ListView):
                 search=search_vector,
                 rank=SearchRank(search_vector, search_query)
             ).annotate(
-                similarity=TrigramSimilarity(self.vector[0], query)
-                           + TrigramSimilarity(self.vector[1], query),
+                similarity=TrigramSimilarity('title', query) + TrigramSimilarity('salary', query),
             ).filter(similarity__gt=0.3).order_by("-similarity")
 
         return result
