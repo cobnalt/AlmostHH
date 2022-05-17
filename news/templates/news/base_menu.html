@@ -20,8 +20,10 @@
                                         {% if request.user.is_authenticated %}
                                             {% if perms.portal.change_profile %}
                                             <li><a href="{% url 'portal:my_resumes' %}">Мои резюме</a></li>
+                                            <li><a href="{% url 'portal:dashboard' %}">Рабочий стол</a></li>
                                             {% else %}
                                             <li><a href="{% url 'portal:my_vacancies' %}">Мои вакансии</a></li>
+                                            <li><a href="{% url 'portal:dashboard' %}">Рабочий стол</a></li>
                                             {% endif %}
 
                                         <li><a href="#">Меню <i class="ti-angle-down"></i></a>
