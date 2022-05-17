@@ -1,131 +1,99 @@
 {% extends "news/base.html" %}
 {% block title %} {{ vacancy.title }} {% endblock %}
 {% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col-3">
-            <div class="left-menu">
 
-                    {% include 'portal/account/includes/dashboard_menu.html' %}
-
+<div class="job_details_area" style="padding-top: 0px;">
+    <div class="container">
+        <div class="col-md-12">
+            <div class="submit_btn">
+                <button class="boxed-btn3">
+                    <a onclick="javascript:history.back(); return false;">Назад</a>
+                </button>
             </div>
         </div>
-        <div class="col-9">
-            {% if perms.portal.change_vacancy and vacancy.company.user == request.user %}
-            {% if vacancy.comment %}
-            <p class="alert alert-danger">{{ vacancy.comment }}</p>
-            {% endif %}
-            {% endif %}
-            <h1>{{ vacancy.title }}
-                {% if perms.portal.change_vacancy and vacancy.company.user == request.user %}
-                <span class="h6"><a href="{% url 'portal:edit_vacancy' vacancy.id %}">редактировать</a></span>
-                {% endif %}
-            </h1>
-
-            {% if perms.portal.change_resume %}
-            {% include 'favorite/includes/add_to_favorites.html' with type='vac' id=vacancy.id %}
-            {% endif %}
-
-            <p class="h3 text-muted">{{ vacancy.salary }}</p>
-            <div class="company_card mt-5 mb-5">
-                <p class="h3">{{ vacancy.company.title }}</p>
-                <p>{{ vacancy.company.logo }}</p>
-            </div>
-            <p>{{ vacancy.description | linebreaks }}</p>
-            <h2>Адрес</h2>
-            <p>{{ vacancy.address }}</p>
-            <h2>Контактная информация</h2>
-            <p>{{ vacancy.company.contact }}</p>
-
-            {% if perms.portal.change_resume %}
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                Откликнуться
-            </button>
-            {% include 'portal/account/includes/feedback_resume.html' with type='resume' items=resumes %}
-            {% endif %}
-        </div>
-    </div>
-</div>
-<div class="job_details_area">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8">
-                    <div class="job_details_header">
-                        <div class="single_jobs white-bg d-flex justify-content-between">
-                            <div class="jobs_left d-flex align-items-center">
-                                <div class="thumb">
-                                    <img src="{{ vacancy.company.logo }}" alt="">
-                                </div>
-                                <div class="jobs_conetent">
-                                    <h4>{{ vacancy.title }}</h4>
-                                    <div class="links_locat d-flex align-items-center">
-                                        <div class="location">
-                                            <p> <i class="fa fa-map-marker"></i> {{ vacancy.address }}</p>
-                                        </div>
-                                        <div class="location">
-                                            <p> <i class="fa fa-clock-o"></i> Полная занятость</p>
-                                        </div>
+        <br>
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="job_details_header">
+                    <div class="single_jobs white-bg d-flex justify-content-between">
+                        <div class="jobs_left d-flex align-items-center">
+                            <div class="thumb">
+                                <img src="{{ vacancy.company.logo }}" alt="">
+                            </div>
+                            <div class="jobs_conetent">
+                                <h4>{{ vacancy.title }}</h4>
+                                <div class="links_locat d-flex align-items-center">
+                                    <div class="location">
+                                        <p> <i class="fa fa-map-marker"></i> {{ vacancy.address }}</p>
+                                    </div>
+                                    <div class="location">
+                                        <p> <i class="fa fa-clock-o"></i> Полная занятость</p>
                                     </div>
                                 </div>
                             </div>
-                            <div class="jobs_right">
-                                <div class="apply_now">
-                                    <a class="heart_mark" href="#"> <i class="ti-heart"></i> </a>
-                                </div>
+                        </div>
+                        <div class="jobs_right">
+                            <div class="apply_now">
+                                {% if perms.portal.change_resume %}
+                                {% include 'favorite/includes/add_to_favorites.html' with type='vac' id=vacancy.id %}
+                                {% endif %}
                             </div>
                         </div>
                     </div>
-                    <div class="descript_wrap white-bg">
-                        <div class="single_wrap">
-                            <h4>Описание вакансии</h4>
-                            <p>{{ vacancy.description | linebreaks }}</p>
-                        </div>
+                </div>
+                <div class="descript_wrap white-bg">
+                    <div class="single_wrap">
+                        <h4>Описание вакансии</h4>
+                        <p>{{ vacancy.description | linebreaks }}</p>
                     </div>
                 </div>
-                <div class="col-lg-4">
-                    <div class="job_sumary">
-                        <div class="summery_header">
-                            <h3>Резюме работы</h3>
-                        </div>
-                        <div class="job_content">
-                            <ul>
-                                <li>Опубликованно: <span>12 Nov, 2019</span></li>
-                                <li>Компания: <span>{{ vacancy.company.title }}</span></li>
-                                <li>Зарплата: <span>{{ vacancy.salary }}</span></li>
-                                <li>Местонахождение:<br> <span>{{ vacancy.address }}</span></li>
-                                <li>Контактная информация:<br> <span>{{ vacancy.company.contact }}</span></li>
-                            </ul>
-                        </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="job_sumary">
+                    <div class="summery_header">
+                        <h3>Резюме работы</h3>
                     </div>
-                    <div class="share_wrap d-flex">
-                        <span>Поделиться:</span>
+                    <div class="job_content">
                         <ul>
-                            <li><a href="#"> <i class="fa fa-facebook"></i></a> </li>
-                            <li><a href="#"> <i class="fa fa-google-plus"></i></a> </li>
-                            <li><a href="#"> <i class="fa fa-twitter"></i></a> </li>
-                            <li><a href="#"> <i class="fa fa-envelope"></i></a> </li>
+                            <li>Опубликованно: <span>12 Nov, 2019</span></li>
+                            <li>Компания: <span>{{ vacancy.company.title }}</span></li>
+                            <li>Зарплата: <span>{{ vacancy.salary }}</span></li>
+                            <li>Местонахождение:<br> <span>{{ vacancy.address }}</span></li>
+                            <li>Контактная информация:<br> <span>{{ vacancy.company.contact }}</span></li>
                         </ul>
                     </div>
-                    {% if perms.portal.change_vacancy and vacancy.company.user == request.user %}
-                    <div class="col-md-12">
-                        <div class="submit_btn">
-                            <button class="boxed-btn3 w-100">
-                                <a href="{% url 'portal:edit_vacancy' vacancy.id %}">редактировать</a>
-                            </button>
-                        </div>
+                </div>
+                <div class="share_wrap d-flex">
+                    <span>Поделиться:</span>
+                    <ul>
+                        <li><a href="#"> <i class="fa fa-facebook"></i></a> </li>
+                        <li><a href="#"> <i class="fa fa-google-plus"></i></a> </li>
+                        <li><a href="#"> <i class="fa fa-twitter"></i></a> </li>
+                        <li><a href="#"> <i class="fa fa-envelope"></i></a> </li>
+                    </ul>
+                </div>
+                {% if perms.portal.change_vacancy and vacancy.company.user == request.user %}
+                <div class="col-md-12">
+                    <div class="submit_btn">
+                        <button class="boxed-btn3 w-100">
+                            <a href="{% url 'portal:edit_vacancy' vacancy.id %}">редактировать</a>
+                        </button>
                     </div>
-                    {% endif %}
-                    {% if perms.portal.change_resume %}
-                    <div class="col-md-12">
-                        <div class="submit_btn">
-                            <button class="boxed-btn3 w-100" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                Откликнуться
-                            </button>
-                        </div>
+                </div>
+
+                {% endif %}
+                {% if perms.portal.change_resume %}
+                <div class="col-md-12">
+                    <div class="submit_btn">
+                        <button class="boxed-btn3 w-100" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            Откликнуться
+                        </button>
                     </div>
-                    {% include 'portal/account/includes/feedback_resume.html' with type='resume' items=resumes %}
-                    {% endif %}
+                </div>
+                {% include 'portal/account/includes/feedback_resume.html' with type='resume' items=resumes %}
+                {% endif %}
             </div>
         </div>
     </div>
+</div>
 {% endblock %}
