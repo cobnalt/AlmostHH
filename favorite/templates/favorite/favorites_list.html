@@ -18,18 +18,73 @@
             </div>
         </div>
         <div class="col-9">
+            <br>
             {% for item in res %}
-            <div class="res-item">
-                <p class="item_title"><a href="{% url 'portal:resume_detail' item.id %}">{{ item.title }}</a></p>
-                <p class="item_salary">{{ item.salary }}</p>
+             <div class="job_listing_area" style="width:100%">
+                <div class="container">
+                    <div class="row" style="width:100%">
+                        <div class="col-lg-9">
+                            <div class="job_lists m-0">
+                                <div class="row" style="width:100%">
+                                    <div class="col-lg-12 col-md-12">
+                                        <div class="single_jobs white-bg d-flex justify-content-between">
+                                            <div class="jobs_left d-flex align-items-center">
+                                                <div class="thumb">
+                                                    <img src="img/svg_icon/1.svg" alt="">
+                                                </div>
+                                                <div class="jobs_conetent">
+                                                    <a href="{% url 'portal:resume_detail' item.id %}"><h4>{{ item.title }}</h4></a>
+                                                    <div class="links_locat d-flex align-items-center">
+                                                        <div class="location">
+                                                            <p> <i class="fa fa-rub"></i>{{ item.salary }}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             {% endfor %}
             {% for item in vac %}
-            <div class="vac-item">
-                <p class="item_title"><a href="{% url 'portal:vacancy_detail' item.id %}">{{ item.title }}</a></p>
-                <p class="item_salary">{{ item.salary }}</p>
-                <p class="item_comp_title">{{ item.company.title }}</p>
-                <p class="item_comp_title">{{ item.address }}</p>
+             <div class="job_listing_area" style="width:100%">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-9">
+                            <div class="job_lists m-0">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12">
+                                        <div class="single_jobs white-bg d-flex justify-content-between">
+                                            <div class="jobs_left d-flex align-items-center">
+                                                <div class="thumb">
+                                                    <img src="img/svg_icon/1.svg" alt="">
+                                                </div>
+                                                <div class="jobs_conetent">
+                                                    <a href="{% url 'portal:vacancy_detail' item.id %}"><h4>{{ item.title }}</h4></a>
+                                                    <div class="links_locat d-flex align-items-center">
+                                                        <div class="location">
+                                                            <p> <i class="fa fa-user-o"></i>{{ item.company.title }}</p>
+                                                        </div>
+                                                        <div class="location">
+                                                            <p> <i class="fa fa-map-marker"></i>{{ item.address }}</p>
+                                                        </div>
+                                                                                                                <div class="location">
+                                                            <p> <i class="fa fa-rub"></i>{{ item.salary }}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             {% endfor %}
         </div>
