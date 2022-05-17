@@ -43,8 +43,8 @@
                             {% else %}
                             <td>{{ resume.get_status_display }}</td>
                             {% endif %}
-                            <td><a href="{% url 'portal:edit_resume' resume.id %}"><i class="bi bi-pen-fill"></i></a></td>
-                            <td><a href="{% url 'portal:delete_resume' resume.id %}"><i class="bi bi-x-circle-fill"></i></a></td>
+                            <td><a href="{% url 'portal:edit_resume' resume.id %}"><i class="fa fa-pencil-square-o"></i></a></td>
+                            <td><a href="{% url 'portal:delete_resume' resume.id %}"><i class="fa fa-trash"></i></a></td>
                         </tr>
                         {% empty %}
                         <h5 class="text-center">Пока еще не добавлено ни одного резюме</h5>

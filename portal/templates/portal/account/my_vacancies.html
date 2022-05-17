@@ -45,8 +45,8 @@
                             {% else %}
                             <td>{{ vac.get_status_display }}</td>
                             {% endif %}
-                            <td><a href="{% url 'portal:edit_vacancy' vac.id %}"><i class="bi bi-pen-fill"></i></a></td>
-                            <td><a href="{% url 'portal:delete_vacancy' vac.id %}"><i class="bi bi-x-circle-fill"></i></a></td>
+                            <td><a href="{% url 'portal:edit_vacancy' vac.id %}"><i class="fa fa-pencil-square-o"></i></a></td>
+                            <td><a href="{% url 'portal:delete_vacancy' vac.id %}"><i class="fa fa-trash"></i></a></td>
                         </tr>
                         {% empty %}
                         <h5>Пока еще не добавлено ни одной вакансии</h5>
