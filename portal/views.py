@@ -21,6 +21,7 @@ from django.urls import reverse_lazy
 
 from common.utils.fulltextsearch import SearchResultsList
 
+
 class UserLogin(LoginView):
     template_name = 'portal/account/login.html'
     success_url = 'portal/account/dashboard.html'
@@ -30,38 +31,8 @@ class UserLogin(LoginView):
                      }
 
 
-# def user_login(request):
-#     if request.method == 'POST':
-#         form = LoginForm(request.POST)
-#         if form.is_valid():
-#             cd = form.cleaned_data
-#             user = authenticate(request,
-#                                 username=cd['username'],
-#                                 password=cd['password'])
-#         if user is not None:
-#             if user.is_active:
-#                 login(request, user)
-#                 vacancies = Vacancy.objects.all().filter(status='published')
-#                 resumes = Resume.objects.all().filter(status='published')
-#                 return render(request, 'portal/account/dashboard.html',
-#                               {'section': 'dashboard', 'vacancies': vacancies,
-#                                'resumes': resumes})
-#             else:
-#                 return HttpResponse("Disable Acc")
-#         else:
-#             return HttpResponse("Invalid login")
-#     else:
-#         form = LoginForm()
-#     return render(request, 'portal/account/login.html', {'form': form})
-
-
 class UserLogout(LogoutView):
     template_name = 'portal/account/logout.html'
-
-
-# def user_logout(request):
-#     logout(request)
-#     return render(request, 'portal/account/logout.html')
 
 
 class Dashboard(LoginRequiredMixin, TemplateView):
@@ -70,15 +41,6 @@ class Dashboard(LoginRequiredMixin, TemplateView):
                      'vacancies': Vacancy.published.all(),
                      'resumes': Resume.published.all()
                      }
-
-
-# @login_required()
-# def dashboard(request):
-#     vacancies = Vacancy.objects.all().filter(status='published')
-#     resumes = Resume.objects.all().filter(status='published')
-#     return render(request, 'portal/account/dashboard.html',
-#                   {'section': 'dashboard', 'vacancies': vacancies,
-#                    'resumes': resumes})
 
 
 def register(request):
@@ -119,22 +81,6 @@ class Private(LoginRequiredMixin, TemplateView):
                             user=self.request.user).first(),
                         })
         return context
-
-
-# @login_required()
-# def private(request):
-#     try:
-#         company_card = get_object_or_404(CompanyCard, user=request.user)
-#     except Exception:
-#         company_card = None
-#     try:
-#         profile = get_object_or_404(Profile, user=request.user)
-#     except Exception:
-#         profile = None
-#     return render(request, 'portal/account/private.html',
-#                   {'section': 'private',
-#                    'company_card': company_card,
-#                    'profile': profile})
 
 
 @login_required
@@ -193,14 +139,6 @@ class MyVacancies(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
             'left_menu': 'my_vacs'}
         )
         return context
-
-
-# @login_required
-# @permission_required('portal.add_vacancy')
-# def my_vacancies(request):
-#     vacs = Vacancy.objects.filter(company=request.user.companycard)
-#     return render(request, 'portal/account/my_vacancies.html',
-#                   {'vacs': vacs, 'left_menu': 'my_vacs'})
 
 
 @login_required
@@ -278,20 +216,6 @@ class DeleteVacancy(LoginRequiredMixin, PermissionRequiredMixin,
     success_message = 'Вакансия удалена успешно.'
 
 
-# @login_required
-# @permission_required('portal.delete_vacancy')
-# def delete_vacancy(request, vacancy_id):
-#     del_vac = get_object_or_404(Vacancy, pk=vacancy_id,
-#                                 company__user=request.user)
-#     if request.method == 'POST':
-#         del_vac.delete()
-#         messages.success(request, 'Вакансия удалена успешно.')
-#         return redirect('portal:my_vacancies')
-#     else:
-#         context = {'del_vac': del_vac}
-#     return render(request, 'portal/account/delete_vacancy.html', context)
-
-
 class MyResumes(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
     template_name = 'portal/account/my_resumes.html'
     permission_required = 'portal.add_resume'
@@ -303,14 +227,6 @@ class MyResumes(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
              'left_menu': 'my_resumes'}
         )
         return context
-
-
-# @login_required
-# @permission_required('portal.add_resume')
-# def my_resumes(request):
-#     resumes = Resume.objects.filter(user=request.user)
-#     return render(request, 'portal/account/my_resumes.html',
-#                   {'resumes': resumes, 'left_menu': 'my_resumes'})
 
 
 @login_required
@@ -405,19 +321,6 @@ class DeleteResume(LoginRequiredMixin, PermissionRequiredMixin,
     success_message = 'Резюме удалено успешно.'
 
 
-# @login_required
-# @permission_required('portal.delete_resume')
-# def delete_resume(request, resume_id):
-#     del_resume = get_object_or_404(Resume, pk=resume_id)
-#     if request.method == 'POST':
-#         del_resume.delete()
-#         messages.success(request, 'Резюме удалено успешно.')
-#         return redirect('portal:my_resumes')
-#     else:
-#         context = {'del_resume': del_resume}
-#     return render(request, 'portal/account/delete_resume.html', context)
-
-
 @login_required
 @permission_required('portal.add_resume')
 def add_experience(request):
@@ -449,18 +352,6 @@ def delete_experience(request, experience_id):
     pass
 
 
-# @login_required()
-# def find_resume(request):
-#     query = request.GET.get('q')
-#     resume = Resume.published.all()
-#     if not query:
-#         return render(request, 'portal/account/find_resume.html',
-#                       {'resume': resume})
-#     resume = resume.filter(title__icontains=query)
-#     return render(request, 'portal/account/find_resume.html',
-#                   {'resume': resume})
-
-
 class FindResume(LoginRequiredMixin, SearchResultsList):
     model = Resume
     context_object_name = "resume"
@@ -469,16 +360,6 @@ class FindResume(LoginRequiredMixin, SearchResultsList):
     headline_expression = Concat(F("id"), F("title"), F("salary"),
                                  F("about_me"))
     annotate_expression = Concat('user_id__username', Value(''))
-
-
-# @login_required()
-# def find_job(request):
-#     query = request.GET.get('q')
-#     job = Vacancy.published.all()
-#     if not query:
-#         return render(request, 'portal/account/find_job.html', {'job': job})
-#     job = job.filter(title__icontains=query)
-#     return render(request, 'portal/account/find_job.html', {'job': job})
 
 
 class FindJob(LoginRequiredMixin, SearchResultsList):

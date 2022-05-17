@@ -109,10 +109,14 @@ $(document).ready(function(){
     });
 
     $(function () {
-        $("#id_date_of_birth, input[id$='-finish'], input[id$='-start']").datepicker({
+        $("#id_date_of_birth").datepicker({
           format:'dd.mm.yyyy',
     });
+
   });
+  $('body').on('focus',"input[id$='-finish'], input[id$='-start']", function(){
+        $(this).datepicker();
+    });
 
     $(function() {
         $('.exp-formset .exp-formset-item').formset({
