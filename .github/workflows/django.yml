@@ -29,7 +29,7 @@ jobs:
         run: python -m pip install --upgrade pip && pip install -r requirements.txt
 
       - name: Update migrations
-        run: find ./favorite/migrations -type f -name '0*.py' -delete && find ./news/migrations -type f -name '0*.py' -delete && find ./portal/migrations -type f -name '0*.py' -delete && python manage.py makemigrations && python manage.py migrate
+        run: find ./favorite/migrations -type f -name '*.py' -not-name "__init__.py" -delete && find ./news/migrations -type f -name '*.py' -not-name "__init__.py" -delete && find ./portal/migrations -type f -name '*.py' -not-name "__init__.py" -delete && python manage.py makemigrations && python manage.py migrate
 
       - name: Run Portal App Tests
         run: python manage.py test portal/tests -v 2
